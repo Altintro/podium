@@ -55,7 +55,7 @@ This server needs authentication in every request , in order to make requests yo
 
 Once you've registered and have an *access-token* you will be able to get responses with documents from the DataBase, by adding a header with key as **x-access-token** and value as your token.
 
-###Tournaments:
+### Tournaments:
 
 * **Get Tournaments**:
 
@@ -72,12 +72,13 @@ Once you've registered and have an *access-token* you will be able to get respon
 * **Post Tournament**: Post request to /apiv1/tournaments. The post must have a body with the next format:
 
 	```
-{
-name: 'name',
-sport: 'sport',
-compType: 'sport',
-}
-```
+	{
+	name: 'name',
+	sport: 'sport',
+	compType: 'sport',
+	}
+	
+	```
 * **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid?userid=userObjectid
 * **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
 		
