@@ -85,12 +85,13 @@ Once you've registered and have an *access-token* you will be able to get respon
 ### Users:
 * **Get Users**:
 
- In order to recieve the users registered in the database make a *get* request to */apiv1/users*. Also, ads can be filtered in the query of the request:
-	* By name:  */apiv1/users?name='some_name'* 
-	* By username:  */apiv1/users?username='some_user_name'*
-	* Set a limit: */apiv1/users?limit=2*
-	* Skip certain ads: */apiv1/users?skip=2&skip=6*
-	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=username*
-	* Sort the ads by property: */apiv1/users?sort=name*
+ 	In order to recieve the users registered in the database make a *get* request to */	apiv1/users*. Also, ads can be filtered in the query of the request:
+ 	
+ 	* By name:  */apiv1/users?name='some_name'*
+ 	* By username:  */apiv1/users?username='some_user_name'*
+ 	* Set a limit: */apiv1/users?limit=2*
+ 	* Skip certain ads: */apiv1/users?skip=2&skip=6*
+ 	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=username*
+ 	* Sort the ads by property: */apiv1/users?sort=name*
 
 * **Delete User**: Delete request to /apiv1/users/userObjectid
