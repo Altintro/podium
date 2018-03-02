@@ -1,11 +1,15 @@
 "use_strict"
 
 const mongoose = require('mongoose')
-
-const tournamentSchema = mongoose.Schema({
+var Schema = mongoose.Schema
+const tournamentSchema = Schema({
     name: String,
     sport: String,
-    type: String,
+    compType: String,
+    players:[{ type: Schema.Types.ObjectId, ref :'User' }],
+    levelAverage: String,
+    starts: Date,
+    finishes: Date,
 })
 
 tournamentSchema.statics.list = function(filter, limit, skip, fields, sort, callback){
@@ -14,7 +18,8 @@ tournamentSchema.statics.list = function(filter, limit, skip, fields, sort, call
     query.skip(skip)
     query.sort(sort)
     query.select(fields)
-    query.exec(callback)
+    query.populate('players').exec(callback)
+    //query.exec(callback)
 }
 
 var Tournament = mongoose.model ('Tournament', tournamentSchema)

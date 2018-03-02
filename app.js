@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
-app.use('/apiv1/auth', require('./routes/apiv1/auth/authController'))
+app.use('/apiv1/auth', require('./routes/apiv1/auth/auth'))
 app.use('/apiv1/users', require('./routes/apiv1/users'));
 app.use('/apiv1/tournaments',require('./routes/apiv1/tournaments'))
 
