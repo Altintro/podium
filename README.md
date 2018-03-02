@@ -36,7 +36,7 @@ This server needs authentication in every request , in order to make requests yo
 		}
 		  
 		
-	The response for the request will be an *access token* that should be use in 	**every request as a header** (x-access-token) in order to get a response 	from the server. Copy the token and save it for further requests.
+	**IMPORTANT**: The response for the request will be an *access token* that should be use in 	**every request as a header** (x-access-token) in order to get a response 	from the server. Copy the token and save it for further requests.
 		
 		
 * **Login**: If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/auth/login. the post must have a body with the login fields: email, password:
@@ -55,7 +55,9 @@ This server needs authentication in every request , in order to make requests yo
 
 Once you've registered and have an *access-token* you will be able to get responses with documents from the DataBase, by adding a header with key as **x-access-token** and value as your token.
 
-* **Tournaments**:
+###Tournaments:
+
+* **Get Tournaments**:
 
 	 In order to recieve the tournaments in the database make a *get* request to */apiv1/tournaments*. Also, tournaments can be filtered in the query of the request:
 
@@ -66,11 +68,28 @@ Once you've registered and have an *access-token* you will be able to get respon
 	* Skip certain ads: */apiv1/tournaments?skip=2&skip=6*
 	* Recieve only chosen fields of the ads: */apiv1/tournaments?fields=name&fields=sport*
 	* Sort the ads by property: */apiv1/tournaments?sort=sport*
-	
-* **Users**: In order to recieve the users registered in the database make a *get* request to */apiv1/users*. Also, ads can be filtered in the query of the request:
+
+* **Post Tournament**: Post request to /apiv1/tournaments. The post must have a body with the next format:
+
+	```
+{
+name: 'name',
+sport: 'sport',
+compType: 'sport',
+}
+```
+* **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid?userid=userObjectid
+* **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
+		
+### Users:
+* **Get Users**:
+
+ In order to recieve the users registered in the database make a *get* request to */apiv1/users*. Also, ads can be filtered in the query of the request:
 	* By name:  */apiv1/users?name='some_name'* 
 	* By username:  */apiv1/users?username='some_user_name'*
 	* Set a limit: */apiv1/users?limit=2*
 	* Skip certain ads: */apiv1/users?skip=2&skip=6*
 	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=username*
 	* Sort the ads by property: */apiv1/users?sort=name*
+
+* **Delete User**: Delete request to /apiv1/users/userObjectid
