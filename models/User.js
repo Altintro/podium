@@ -5,7 +5,7 @@ var Schema = mongoose.Schema
 
 const userSchema = Schema({
     name: String,
-    username: String,
+    userName: String,
     pass: String,
     email: String,
     image: String,
