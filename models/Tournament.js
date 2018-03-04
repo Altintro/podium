@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 const tournamentSchema = Schema({
     name: String,
-    sport: String,
+    sport: { type : Schema.Types.ObjectId, ref : 'Sport'},
     compType: String,
     players:[{ type: Schema.Types.ObjectId, ref :'User' }],
     levelAverage: String,
@@ -19,7 +19,6 @@ tournamentSchema.statics.list = function(filter, limit, skip, fields, sort, call
     query.sort(sort)
     query.select(fields)
     query.populate('players').exec(callback)
-    //query.exec(callback)
 }
 
 var Tournament = mongoose.model ('Tournament', tournamentSchema)
