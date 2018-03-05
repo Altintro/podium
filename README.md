@@ -30,7 +30,7 @@ This server needs authentication in every request , in order to make requests yo
 	
 		{ 
 		name:  'name'
-		username: 'username,
+		userName: 'username,
 		pass:  'password',
 		email: 'useremail'
 		}
