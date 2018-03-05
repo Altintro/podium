@@ -13,7 +13,7 @@ exports.register = (req,res) => {
     User.create({
 
         name: req.body.name,
-        userName: req.body.userName,
+        alias: req.body.alias,
         email: req.body.email,
         pass: hashedPassword
 

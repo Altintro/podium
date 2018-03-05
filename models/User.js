@@ -4,13 +4,13 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const userSchema = Schema({
-    name: String,
-    userName: String,
-    pass: String,
-    email: String,
-    image: String,
-    gender: String,
-    birthdate: Date,
+    name: { type: String, default : ""},
+    alias: { type: String, default: "", index: { unique: true, dropDups: true } },
+    pass: { type:String, default: "" },
+    email: {type: String, default: "", index: { unique: true, dropDups: true}},
+    image: {type: String, default: "" },
+    gender: {type: String, default: "" },
+    birthdate: {type: Date, index: { sparse: true } },
     latitude: Number,
     longitude: Number,
     ranking: [{ sport: String, ranking: Number}],

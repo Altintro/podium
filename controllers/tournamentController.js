@@ -1,9 +1,10 @@
 'use_strict'
 const Tournament = require('../models/Tournament')
 const User = require('../models/User')
+const Sport = require('../models/Sport')
 
 exports.get = (req,res,send) => {
-    const sport = req.query.sport
+
     const name = req.query.name
 
     const limit = parseInt(req.query.limit)
@@ -15,7 +16,6 @@ exports.get = (req,res,send) => {
 
     const filter = {}
     if(name) { filter.name = { $regex: '^'+name, $options: 'i' }}
-    if(sport){ filter.sport = { $regex: '^'+sport, $options: 'i' }}
 
     Tournament.list(filter,limit,skip,fields,sort, (err, tournaments) => {
         if(err) {
@@ -29,16 +29,17 @@ exports.get = (req,res,send) => {
 exports.post = (req, res, send) => {
 
     Tournament.create({
+        
         name: req.body.name,
-        sport: req.body.sport,
-        compType: req.body.type,
+        compType: req.body.compType,
+
     }, (err, tournament) => {
         if(err){
             res.json({error: 'Error posting tournament'})
             return
         }
 
-        res.json({success: true, tournamet: tournament.name})
+        res.json({ success: true, tournamet: tournament })
     })
 }
 

@@ -5,7 +5,7 @@ const User = require('../models/User')
 exports.get = (req, res, next) => {
 
     const name = req.query.name
-    const userName = req.query.userName
+    const alias = req.query.alias
   
     const limit = parseInt(req.query.limit)
     const skip = parseInt(req.query.skip)
@@ -15,7 +15,7 @@ exports.get = (req, res, next) => {
     const filter = {}
   
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
-    if(userName){ filter.userName = { $regex: '^'+userName, $options: 'i' }}
+    if(alias){ filter.alias = { $regex: '^'+alias, $options: 'i' }}
   
     User.list(filter,limit,skip,fields,sort,
       (err, users) => {

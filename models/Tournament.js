@@ -3,11 +3,11 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 const tournamentSchema = Schema({
-    name: String,
+    name: { type: String, default: "", required: true },
     sport: { type : Schema.Types.ObjectId, ref : 'Sport'},
-    compType: String,
+    compType: { type: String, default: "", required: true },
     players:[{ type: Schema.Types.ObjectId, ref :'User' }],
-    levelAverage: String,
+    levelAverage: { type: String, default : "" },
     starts: Date,
     finishes: Date,
     longitude: Number,
