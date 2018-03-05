@@ -10,6 +10,8 @@ const tournamentSchema = Schema({
     levelAverage: String,
     starts: Date,
     finishes: Date,
+    longitude: Number,
+    latitude: Number
 })
 
 tournamentSchema.statics.list = function(filter, limit, skip, fields, sort, callback){
