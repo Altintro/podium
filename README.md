@@ -26,11 +26,11 @@
 
 This server needs authentication in every request , in order to make requests you will need to be register as an *User* and have an **access token**, to get a token, follow the next steps:
 	
-* **Registration**: do a *post* request to */apiv1/auth/register*, the post must have a body with the registration fields: name, email, password:
+* **Registration**: do a *post* request to */apiv1/auth/register*, the post must have a body with the registration fields: name, alias, email, password:
 	
 		{ 
 		name:  'name'
-		userName: 'username,
+		alias: 'alias,
 		pass:  'password',
 		email: 'useremail'
 		}
@@ -42,7 +42,7 @@ This server needs authentication in every request , in order to make requests yo
 * **Login**: If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/auth/login. the post must have a body with the login fields: email, password:
 	
 		{
-		email: 'useremail',
+		email: 'email',
 		pass: 'password'
 		}
 
@@ -62,7 +62,6 @@ Once you've registered and have an *access-token* you will be able to get respon
 	 In order to recieve the tournaments in the database make a *get* request to */apiv1/tournaments*. Also, tournaments can be filtered in the query of the request:
 
 	* By name:  */apiv1/tournaments?name='some_name'* 
-	* By sport:  */apiv1/tournaments?sport=tennis*
 	* By type: */apiv1/tournaments?type=league*
 	* Set a limit: */apiv1/tournaments?limit=2*
 	* Skip certain ads: */apiv1/tournaments?skip=2&skip=6*
@@ -74,7 +73,6 @@ Once you've registered and have an *access-token* you will be able to get respon
 	```
 	{
 	name: 'name',
-	sport: 'sport',
 	compType: 'sport',
 	}
 	
@@ -88,10 +86,10 @@ Once you've registered and have an *access-token* you will be able to get respon
  	In order to recieve the users registered in the database make a *get* request to */	apiv1/users*. Also, ads can be filtered in the query of the request:
  	
  	* By name:  */apiv1/users?name='some_name'*
- 	* By username:  */apiv1/users?username='some_user_name'*
+ 	* By alias:  */apiv1/users?alias='some_alias'*
  	* Set a limit: */apiv1/users?limit=2*
  	* Skip certain ads: */apiv1/users?skip=2&skip=6*
- 	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=username*
+ 	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=alias*
  	* Sort the ads by property: */apiv1/users?sort=name*
 
 * **Delete User**: Delete request to /apiv1/users/userObjectid
