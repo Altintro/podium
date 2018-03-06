@@ -10,7 +10,7 @@ const userSchema = Schema({
     email: {type: String, default: "", index: { unique: true, dropDups: true}},
     image: {type: String, default: "" },
     gender: {type: String, default: "" },
-    birthdate: {type: Date, index: { sparse: true } },
+    birthdate: Date,
     latitude: Number,
     longitude: Number,
     ranking: [{ sport: String, ranking: Number, points: Number}],
