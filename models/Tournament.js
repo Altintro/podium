@@ -6,12 +6,15 @@ const tournamentSchema = Schema({
     name: { type: String, default: "", required: true },
     sport: { type : Schema.Types.ObjectId, ref : 'Sport'},
     compType: { type: String, default: "", required: true },
-    players:[{ type: Schema.Types.ObjectId, ref :'User' }],
+    participants:[{ type: Schema.Types.ObjectId, ref: 'Team'}],
+    players: [{ type: Schema.Types.ObjectId, ref: 'User'}],
     levelAverage: { type: String, default : "" },
+    clasification: [{ type: Schema.Types.ObjectId, ref: 'Clasification'}],
     starts: Date,
     finishes: Date,
     longitude: Number,
-    latitude: Number
+    latitude: Number,
+    open: Boolean
 })
 
 tournamentSchema.statics.list = function(filter, limit, skip, fields, sort, callback){

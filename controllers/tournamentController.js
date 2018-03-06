@@ -2,6 +2,7 @@
 const Tournament = require('../models/Tournament')
 const User = require('../models/User')
 const Sport = require('../models/Sport')
+const Team = require('../models/Team')
 
 exports.get = (req,res,send) => {
 

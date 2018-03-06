@@ -4,9 +4,9 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const clasificationSchema = Schema({
-    tournament: { type: Schema.Types.ObjectId, ref :'Tournament'},
-    compType: String,
-    chart: [{ type: Schema.Types.ObjectId, ref :'Game'}]
+    game: {type: Schema.Types.ObjectId, ref: 'Game'},
+    round: Number,
+    match: Number
 })
 
 var Clasification = mongoose.model ('Clasification', clasificationSchema)

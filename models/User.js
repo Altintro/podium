@@ -13,7 +13,7 @@ const userSchema = Schema({
     birthdate: {type: Date, index: { sparse: true } },
     latitude: Number,
     longitude: Number,
-    ranking: [{ sport: String, ranking: Number}],
+    ranking: [{ sport: String, ranking: Number, points: Number}],
     played: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     playing: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     won: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
