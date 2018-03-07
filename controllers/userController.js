@@ -9,12 +9,8 @@ exports.get = (req, res, next) => {
   
     const limit = parseInt(req.query.limit)
     const skip = parseInt(req.query.skip)
-   // const fields = req.query.fields
-    const sort = req.query.sort
-  
-
-    var fields = req.query.fields
-    fields.pass = 0
+    const fields = req.query.fields
+    const sort = req.query.sort 
 
     const filter = {}
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
