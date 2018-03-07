@@ -55,6 +55,42 @@ This server needs authentication in every request , in order to make requests yo
 
 Once you've registered and have an *access-token* you will be able to get responses with documents from the DataBase, by adding a header with key as **x-access-token** and value as your token.
 
+### Games
+
+* **Get Games**:
+
+	 In order to recieve the games in the database make a *get* request to */apiv1/games*. Also, games can be filtered in the query of the request:
+
+	* By name:  */apiv1/games?name='some_name'* 
+	* By type: */apiv1/games?type=league*
+	* Set a limit: */apiv1/games?limit=2*
+	* Skip certain ads: */apiv1/games?skip=2&skip=6*
+	* Recieve only chosen fields of the ads: */apiv1/games?fields=name&fields=sport*
+	* Sort the ads by property: */apiv1/games?sort=sport*
+
+* **Post Game**: Post request to /apiv1/games?alias='useralias'&sport='sportname'
+	
+	```
+	{
+	gameName: 'gameName'
+	userAlias: 'useralias',
+	userId: 'userID'
+	sportId: 'sportId',
+	teamName: 'teamName'
+	}
+	``
+	
+* **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid. post must have a body with the next format
+	
+	```
+	{
+	alias: 'useralias',
+	sport: 'sport',
+	}
+	
+	```
+* **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
+
 ### Tournaments:
 
 * **Get Tournaments**:
@@ -77,7 +113,15 @@ Once you've registered and have an *access-token* you will be able to get respon
 	}
 	
 	```
-* **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid?userid=userObjectid
+* **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid. post must have a body with the next format
+	
+	```
+	{
+	userid: 'name',
+	sportid: 'sport',
+	}
+	
+	```
 * **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
 		
 ### Users:

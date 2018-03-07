@@ -56,13 +56,13 @@ exports.delete =  (req,res,next) => {
 
 exports.signup = (req, res, send) => {
     var query = { _id: req.params.id }
-    var operation = { $push: { players: req.query.userid }}
+    var operation = { $push: { players: req.body.userid }}
     Tournament.update(query, operation, (err) => {
         if(err){
             res.json({error:'Error sign up in tournament'})
             return
         }
-        var query = { _id: req.query.userid }
+        var query = { _id: req.body.userid }
         var operation = { $push: {tournamentsPlaying: req.params.id }}
         User.update(query, operation, (err) => {
             if(err) {
