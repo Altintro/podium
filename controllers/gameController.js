@@ -1,6 +1,7 @@
 'use_strict'
 const Game = require('../models/Game')
 const Team = require('../models/Team')
+const User = require('../models/User')
 
 exports.get = (req,res,send) => {
 
