@@ -12,4 +12,12 @@ router.get('/',verifyToken,gameController.get)
 // Post games
 router.post('/',verifyToken,gameController.post)
 
+// Sign up to game
+router.post('/:id',verifyToken,gameController.signup)
+
+// Delete game
+router.delete('/:id',verifyToken,gameController.delete)
+
+
+
 module.exports = router

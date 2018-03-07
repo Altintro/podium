@@ -1,5 +1,6 @@
 'use_strict'
 const Game = require('../models/Game')
+const Team = require('../models/Team')
 
 exports.get = (req,res,send) => {
 
@@ -23,16 +24,73 @@ exports.get = (req,res,send) => {
 
 exports.post = (req, res, send) => {
 
-    Game.create({
+    // Game.create({
+    //     name: req.body.name,
+    // }, (err, game) => {
+    //     if(err){
+    //         res.json({error: 'Error posting game'})
+    //         return
+    //     }
+    //     res.json({ success: true, game: game })
+    // }) 
 
-        name: req.body.name,
-
-    }, (err, game) => {
+    Team.create({
+        players = [{ _id: req.query.userid }]
+    }, (err, team) => {
         if(err){
-            res.json({error: 'Error posting game'})
+            res.json({error: 'Error creating team for user'})
             return
         }
+        Game.create({
+            name: req.body.name,
+            participants: [team]
+        }, (err,game) => {
+            if(err){
+                res.json({error: 'Error creating game'})
+                return
+            }
+            res.json({ success: true, game: game})
+        })
+    })
+}
 
-        res.json({ success: true, game: game })
+exports.signup = (req, res, send) => {
+    // Create team from the user that wants to sign up to the tournament
+    Team.create({
+        players = [{ _id: req.query.userid }]
+    }, (err, team) => {
+        if(err){
+            res.json({ error: 'Error creating Team for User when signing up to game'})
+            return
+        }
+        // If team is created with success, push it to the game's participants array
+        var query = { _id: req.params.id} // id from the Game to update with the team
+        var operation = { $push: { participants: team._id }} 
+        Game.update(query,operation, (err) => {
+            if(err){
+                res.json({error: 'Error signing up team in game'})
+                return
+            }
+            //If game is updated with the team with success, push the game into gamesPlaying array of the user
+            var query = { _id: req.query.userid } // id from the User to update with the game
+            var operation = { $push: { gamesPlaying: req.params.id }} 
+            User.update(query, operation, (err) => {
+                if(err){
+                    res.json({error: 'Error sign up in user'})
+                    return
+                }
+                res.json({success:true, message: 'User sign up for game'})
+            })
+        })
+    })
+}
+
+exports.delete =  (req,res,next) => {
+    Game.deleteOne({_id: req.params.id}, (err, user) => {
+      if(err) {
+          res.json({ error: 'Error deleting game' + err})
+          return
+      }
+      res.json({deleted: true})
     })
 }

@@ -63,7 +63,7 @@ exports.signup = (req, res, send) => {
             return
         }
         var query = { _id: req.query.userid }
-        var operation = { $push: {playing: req.params.id }}
+        var operation = { $push: {tournamentsPlaying: req.params.id }}
         User.update(query, operation, (err) => {
             if(err) {
                 res.json({error: 'Error sign up in user'})
