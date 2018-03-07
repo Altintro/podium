@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const teamSchema = Schema({
-    name: { type: String, default: "", index: { unique: true, dropDups: true } },
+    name: { type: String, default: "", index: { unique: true, dropDups: true, sparse: true } },
     image: { type: String, default: "" },
     description: { type: String, default: "" },
     players: [{type: Schema.Types.ObjectId, ref: 'User'}]
