@@ -13,13 +13,12 @@ exports.get = (req, res, next) => {
     const sort = req.query.sort
   
 
-    const fields = {}
-    fields = req.query.fields
+    var fields = req.query.fields
     fields.pass = 0
 
     const filter = {}
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
-    if(alias){ filter.alias = { $regex: '^'+alias, $options: 'i' }}
+    if(alias){ filter.alias = { $regex: '^'+ alias, $options: 'i' }}
 
     console.log(fields)
   
