@@ -15,8 +15,6 @@ exports.get = (req, res, next) => {
     const filter = {}
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
     if(alias){ filter.alias = { $regex: '^'+ alias, $options: 'i' }}
-
-    console.log(fields)
   
     User.list(filter,limit,skip,fields,sort,
       (err, users) => {
