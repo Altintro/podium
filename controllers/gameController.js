@@ -25,68 +25,31 @@ exports.get = (req,res,send) => {
 }
 
 exports.post = (req, res, send) => {
-    var query = { _id : req.body.sportId }
-    Sport.findOne(query,(err,sport) => {
+    Team.create({
+        players : [{ _id: req.query.userid }]
+    }, (err, team) => {
         if(err){
-            res.json({message: 'Sport not found', err})
+            res.json({error: 'Error creating team for user', err})
             return
         }
-        var teamName = (sport.modality === 'individual') ? req.query.alias : req.body.teamName
-        Team.create({
-            name = teamName,
-            players: [{_id: req.body.userId}]
-        },(err, team) => {
-            if(err) {
-                res.json({error: 'Error creating team for user', err})
+        Game.create({
+            participants: [team]
+        }, (err,game) => {
+            if(err){
+                res.json({error: 'Error creating game'})
                 return
             }
-            Game.create({
-                name: req.body.name,
-                participants: [team]
-            }, (err,game) => {
+            var query = { _id: req.query.userid } 
+            var operation = { $push: { gamesPlaying: game._id }}
+            User.update(query,operation, (err) => {
                 if(err){
-                    res.json({error: 'Error creating game'})
+                    res.json({error: 'Error adding game to user'})
                     return
                 }
-                var query = { _id: req.query.userid } 
-                var operation = { $push: { gamesPlaying: game._id }}
-                User.update(query,operation, (err) => {
-                    if(err){
-                        res.json({error: 'Error adding game to user'})
-                        return
-                    }
-                    res.json({ success: true, message:'Game created successfully' })
-                })
+                res.json({ success: true, message:'Game created successfully' })
             })
         })
     })
-
-    // Team.create({
-    //     players : [{ _id: req.query.userid }]
-    // }, (err, team) => {
-    //     if(err){
-    //         res.json({error: 'Error creating team for user', err})
-    //         return
-    //     }
-    //     Game.create({
-    //         name: req.body.name,
-    //         participants: [team]
-    //     }, (err,game) => {
-    //         if(err){
-    //             res.json({error: 'Error creating game'})
-    //             return
-    //         }
-    //         var query = { _id: req.query.userid } 
-    //         var operation = { $push: { gamesPlaying: game._id }}
-    //         User.update(query,operation, (err) => {
-    //             if(err){
-    //                 res.json({error: 'Error adding game to user'})
-    //                 return
-    //             }
-    //             res.json({ success: true, message:'Game created successfully' })
-    //         })
-    //     })
-    // })
 }
 
 exports.signup = (req, res, send) => {

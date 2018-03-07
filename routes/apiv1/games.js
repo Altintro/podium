@@ -13,7 +13,7 @@ router.get('/',verifyToken,gameController.get)
 router.post('/',verifyToken,gameController.post)
 
 // Sign up to game
-router.post('/:id',verifyToken,gameController.signup)
+router.post('/signup/:id',verifyToken,gameController.signup)
 
 // Delete game
 router.delete('/:id',verifyToken,gameController.delete)

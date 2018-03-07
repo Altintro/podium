@@ -68,28 +68,11 @@ Once you've registered and have an *access-token* you will be able to get respon
 	* Recieve only chosen fields of the ads: */apiv1/games?fields=name&fields=sport*
 	* Sort the ads by property: */apiv1/games?sort=sport*
 
-* **Post Game**: Post request to /apiv1/games?alias='useralias'&sport='sportname'
+* **Post Game**: Post request to /apiv1/games?userid='userid'
 	
-	```
-	{
-	gameName: 'gameName'
-	userAlias: 'useralias',
-	userId: 'userID'
-	sportId: 'sportId',
-	teamName: 'teamName'
-	}
-	``
-	
-* **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid. post must have a body with the next format
-	
-	```
-	{
-	alias: 'useralias',
-	sport: 'sport',
-	}
-	
-	```
-* **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
+* **Subscribe to Game**: Post request to /apiv1/games/signup/gameObjectid?userid='userObjectId' . post must have a body with the next format
+
+* **Delete Game** : Delete request to /apiv1/games/gameObjectid
 
 ### Tournaments:
 
@@ -113,7 +96,7 @@ Once you've registered and have an *access-token* you will be able to get respon
 	}
 	
 	```
-* **Subscribe to tournament**: Post request to /apiv1/tournaments/tournamentObjectid. post must have a body with the next format
+* **Subscribe to tournament**: Post request to /apiv1/tournaments/signup/tournamentObjectid. post must have a body with the next format
 	
 	```
 	{
