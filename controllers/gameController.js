@@ -49,7 +49,15 @@ exports.post = (req, res, send) => {
                 res.json({error: 'Error creating game'})
                 return
             }
-            res.json({ success: true, game: game})
+            var query = { _id: req.query.userid } 
+            var operation = { $push: { gamesPlaying: game._id }}
+            User.update(query,operation, (err) => {
+                if(err){
+                    res.json({error: 'Error adding game to user'})
+                    return
+                }
+                res.json({ success: true, message:'Game created successfully' })
+            })
         })
     })
 }
