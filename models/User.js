@@ -14,10 +14,14 @@ const userSchema = Schema({
     latitude: Number,
     longitude: Number,
     ranking: [{ sport: String, ranking: Number, points: Number}],
-    played: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
-    playing: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
-    won: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
-    upcoming: [{ type: Schema.Types.ObjectId, ref :'Tournament' }]
+    tournamentsPlayed: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
+    tournamentsPlaying: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
+    tournamentsWon: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
+    tournamentsUpcoming: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
+    gamesPlayed: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
+    gamesPlaying: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
+    gamesWon: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
+    gamesUpcoming: [{ type: Schema.Types.ObjectId, ref: 'Game'}]
 })
 
 userSchema.statics.list = (filter, limit, skip, fields, sort, callback) => {
