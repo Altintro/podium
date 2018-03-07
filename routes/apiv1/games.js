@@ -18,6 +18,4 @@ router.post('/:id',verifyToken,gameController.signup)
 // Delete game
 router.delete('/:id',verifyToken,gameController.delete)
 
-
-
 module.exports = router
