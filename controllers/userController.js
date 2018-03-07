@@ -16,6 +16,7 @@ exports.get = (req, res, next) => {
   
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
     if(alias){ filter.alias = { $regex: '^'+alias, $options: 'i' }}
+    filter.pass = 0
   
     User.list(filter,limit,skip,fields,sort,
       (err, users) => {
