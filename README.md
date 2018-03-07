@@ -77,7 +77,7 @@ Once you've registered and have an *access-token* you will be able to get respon
 	```
 
 	
-* **Subscribe to Game**: Post request to /apiv1/games/signup/gameObjectid?userid='userObjectId' . post must have a body with the next format
+* **Subscribe to Game**: Post request to /apiv1/games/signup/gameObjectid?userid='userObjectId'.
 
 * **Delete Game** : Delete request to /apiv1/games/gameObjectid
 

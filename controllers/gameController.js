@@ -59,7 +59,7 @@ exports.signup = (req, res, send) => {
         players : [{ _id: req.query.userid }]
     }, (err, team) => {
         if(err){
-            res.json({ error: 'Error creating Team for User when signing up to game'})
+            res.json({ error: 'Error creating Team for User when signing up to game', err})
             return
         }
         // If team is created with success, push it to the game's participants array
