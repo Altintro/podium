@@ -39,7 +39,7 @@ exports.post = (req, res, send) => {
         players : [{ _id: req.query.userid }]
     }, (err, team) => {
         if(err){
-            res.json({error: 'Error creating team for user'})
+            res.json({error: 'Error creating team for user', err})
             return
         }
         Game.create({
