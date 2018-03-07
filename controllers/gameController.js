@@ -35,7 +35,7 @@ exports.post = (req, res, send) => {
     // }) 
 
     Team.create({
-        players = [{ _id: req.query.userid }]
+        players : [{ _id: req.query.userid }]
     }, (err, team) => {
         if(err){
             res.json({error: 'Error creating team for user'})
@@ -57,7 +57,7 @@ exports.post = (req, res, send) => {
 exports.signup = (req, res, send) => {
     // Create team from the user that wants to sign up to the tournament
     Team.create({
-        players = [{ _id: req.query.userid }]
+        players : [{ _id: req.query.userid }]
     }, (err, team) => {
         if(err){
             res.json({ error: 'Error creating Team for User when signing up to game'})
