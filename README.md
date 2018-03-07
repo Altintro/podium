@@ -68,7 +68,14 @@ Once you've registered and have an *access-token* you will be able to get respon
 	* Recieve only chosen fields of the ads: */apiv1/games?fields=name&fields=sport*
 	* Sort the ads by property: */apiv1/games?sort=sport*
 
-* **Post Game**: Post request to /apiv1/games?userid='userid'
+* **Post Game**: Post request to /apiv1/games?userid='userid'. The post must have a body with the next format:
+	
+	```
+	{
+	name: 'gameName'
+	}
+	```
+
 	
 * **Subscribe to Game**: Post request to /apiv1/games/signup/gameObjectid?userid='userObjectId' . post must have a body with the next format
 

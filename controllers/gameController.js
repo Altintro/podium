@@ -33,6 +33,7 @@ exports.post = (req, res, send) => {
             return
         }
         Game.create({
+            name = req.body.name,
             participants: [team]
         }, (err,game) => {
             if(err){
