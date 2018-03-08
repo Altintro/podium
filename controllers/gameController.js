@@ -33,7 +33,7 @@ exports.post = (req, res, send) => {
             return
         }
         Game.create({
-            name : req.body.name,
+            name : req.body.name, // Sport, description, location...
             participants: [team]
         }, (err,game) => {
             if(err){

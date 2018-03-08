@@ -103,15 +103,8 @@ Once you've registered and have an *access-token* you will be able to get respon
 	}
 	
 	```
-* **Subscribe to tournament**: Post request to /apiv1/tournaments/signup/tournamentObjectid. post must have a body with the next format
+* **Subscribe to tournament**: Post request to /apiv1/tournaments/signup/tournamentObjectid?userid='userObjectId'. post must have a body with the next format
 	
-	```
-	{
-	userid: 'name',
-	sportid: 'sport',
-	}
-	
-	```
 * **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
 		
 ### Users:
