@@ -1,0 +1,26 @@
+[
+    {
+    "name": "Fernando Frances Monasterio",
+    "alias": "fernando",
+    "pass": "12345678",
+    "email": "fernando95frances@gmail.com"
+    },
+    {
+    "name": "Marta Roldán",
+    "alias": "marta",
+    "pass": "12345678",
+    "email": "mrmartaroldan@gmail.com"
+    },
+    {
+    "name": "Tomás Ignacio Moyano",
+    "alias": "tomasi",
+    "pass": "12345678",
+    "email": "moyanotomasi@gmail.com"
+    },
+    {
+    "name": "Alejandro Cabral Benavente",
+    "alias": "acrux",
+    "pass": "12345678",
+    "email": "cabralejandro@gmail.com"
+    }
+]
