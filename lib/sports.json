@@ -1,0 +1,30 @@
+[
+    {
+    "name": "Tenis",
+    "description": "Tenis"
+    },
+    {
+    "name": "Baloncesto",
+    "description": "Baloncesto"
+    },
+    {
+    "name": "Voleibol",
+    "description": "Voleibol"
+    },
+    {
+    "name": "Padel",
+    "description": "Padel"
+    },
+    {
+    "name": "Fútbol",
+    "description": "Fútbol"
+    },
+    {
+    "name": "Ajedrez",
+    "description": "Ajedrez"
+    },
+    {
+    "name": "Poker",
+    "description": "Poker"
+    }
+]

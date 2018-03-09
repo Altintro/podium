@@ -22,5 +22,11 @@
     "alias": "acrux",
     "pass": "12345678",
     "email": "cabralejandro@gmail.com"
+    },
+    {
+    "name": "Podium App Tester",
+    "alias": "podium",
+    "pass": "12345678",
+    "email": "podiumtest2018@gmail.com"
     }
 ]
