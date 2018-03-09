@@ -4,9 +4,9 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const teamSchema = Schema({
-    name: String,
-    image: String,
-    description: String,
+    name: { type: String, default: ""},
+    image: { type: String, default: "" },
+    description: { type: String, default: "" },
     players: [{type: Schema.Types.ObjectId, ref: 'User'}]
 })
 

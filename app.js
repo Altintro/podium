@@ -26,6 +26,7 @@ app.use('/', require('./routes/index'));
 app.use('/apiv1/auth', require('./routes/apiv1/auth/auth'))
 app.use('/apiv1/users', require('./routes/apiv1/users'));
 app.use('/apiv1/tournaments',require('./routes/apiv1/tournaments'))
+app.use('/apiv1/games', require('./routes/apiv1/games'))
 
 
 // catch 404 and forward to error handler

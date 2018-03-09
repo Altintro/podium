@@ -10,12 +10,11 @@ exports.get = (req, res, next) => {
     const limit = parseInt(req.query.limit)
     const skip = parseInt(req.query.skip)
     const fields = req.query.fields
-    const sort = req.query.sort
-  
+    const sort = req.query.sort 
+
     const filter = {}
-  
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
-    if(alias){ filter.alias = { $regex: '^'+alias, $options: 'i' }}
+    if(alias){ filter.alias = { $regex: '^'+ alias, $options: 'i' }}
   
     User.list(filter,limit,skip,fields,sort,
       (err, users) => {

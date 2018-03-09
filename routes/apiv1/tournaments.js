@@ -13,7 +13,7 @@ router.get('/',verifyToken,tournamentController.get)
 router.post('/',verifyToken, tournamentController.post)
 
 //Sign up to tournament
-router.post('/:id',verifyToken, tournamentController.signup)
+router.post('/singup/:id',verifyToken, tournamentController.signup) 
 
 // Delete
 router.delete('/:id',tournamentController.delete)
