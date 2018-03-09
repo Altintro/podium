@@ -29,7 +29,7 @@ userSchema.statics.list = (filter, limit, skip, fields, sort, callback) => {
     query.limit(limit)
     query.skip(skip)
     query.sort(sort)
-    query.select(fields,'-pass')
+    query.select('-pass')
     query.populate('gamesPlaying').exec(callback)
 }
 
