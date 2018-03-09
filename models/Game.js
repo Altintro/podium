@@ -20,7 +20,8 @@ gameSchema.statics.list = function(filter, limit, skip, fields, sort, callback){
     query.skip(skip)
     query.sort(sort)
     query.select(fields)
-    query.exec(callback)
+    query.populate('participants')
+    .exec(callback)
 }
 
 var Game = mongoose.model ('Game', gameSchema)

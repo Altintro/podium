@@ -11,8 +11,6 @@ exports.get = (req,res,send) => {
     const fields = req.query.fields
     const sort = req.query.sort
 
-    console.log(req.user)
-
     const filter = {}
 
     Game.list(filter,limit,skip,fields,sort, (err, games) => {
