@@ -6,7 +6,7 @@ var Schema = mongoose.Schema
 const userSchema = Schema({
     name: { type: String, default : "" },
     alias: { type: String, default: "", index: { unique: true, dropDups: true } },
-    pass: { type:String, default: "", select: false },
+    pass: { type:String, default: "" },
     email: {type: String, default: "", index: { unique: true, dropDups: true}},
     image: {type: String, default: "" },
     gender: {type: String, default: "" },
@@ -29,7 +29,7 @@ userSchema.statics.list = (filter, limit, skip, fields, sort, callback) => {
     query.limit(limit)
     query.skip(skip)
     query.sort(sort)
-    query.select(fields)
+    query.select(fields,'-pass')
     query.populate('gamesPlaying').exec(callback)
 }
 
