@@ -6,17 +6,13 @@ const Tournament = require('../../models/Tournament')
 var verifyToken = require('./auth/verifyToken')
 var tournamentController = require('../../controllers/tournamentController')
 
-// Get Tournaments
-router.get('/',verifyToken,tournamentController.get)
+router.get('/',verifyToken,tournamentController.getTournaments)
 
-// Post Tournaments
-router.post('/',verifyToken, tournamentController.post)
+router.post('/',verifyToken, tournamentController.postTournament)
 
-//Sign up to tournament
-router.post('/singup/:id',verifyToken, tournamentController.signup) 
+router.post('/signup/:id',verifyToken, tournamentController.signUpTournament) 
 
-// Delete
-router.delete('/:id',tournamentController.delete)
+router.delete('/:id',tournamentController.deleteTournament)
 
 
 module.exports = router

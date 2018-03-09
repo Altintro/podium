@@ -14,15 +14,5 @@ const gameSchema = Schema({
     date: Date
 })
 
-gameSchema.statics.list = function(filter, limit, skip, fields, sort, callback){
-    const query = Game.find(filter)
-    query.limit(limit)
-    query.skip(skip)
-    query.sort(sort)
-    query.select(fields)
-    query.populate('participants')
-    .exec(callback)
-}
-
 var Game = mongoose.model ('Game', gameSchema)
 module.exports = Game

@@ -9,7 +9,6 @@ const User = require('../models/User')
 exports.register = (req,res) => {
     console.log(req.body)
     var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
-
     User.create({
 
         name: req.body.name,
@@ -17,63 +16,50 @@ exports.register = (req,res) => {
         email: req.body.email,
         pass: hashedPassword
 
-    }, (err,user) => {
-
-        if(err){
-            res.json({error: 'Error registering new user'})
-            return
-        }
-
-        //Create a token
-        var token = jwt.sign({id: user._id }, config.secret, {
+    }).then((user) => {
+        var token = jwt.sign({id: user._id },
+            config.secret, {
             expiresIn: 86400 //expires in 24 hours
         })
-
         res.json({auth: true, token: token})
+    }).catch((err) => {
+        return res.json({error: 'Error registering new user'})
     })
 }
 
 exports.me = (req,res) => {
-    User.findById(req.userId,
-        {pass: 0}, //projection , so the password isn't showcased on a response
-        (err,user) => {
-            if(err){
-                res.json({error: 'There was a problem finding the user'})
-                return
+    console.log(req.userId)
+    User.findById(req.userId)
+        .select('-pass')
+        .then((user) => {
+            if(!user) { 
+                return res.json({error: 'No user found'})
             }
-
-            if(!user) {
-                res.json({error: 'No user found'})
-                return
-            }
-
-            res.json({success: true, user: user})
+            return res.json({me: user})
+        }).catch((err) => {
+            return res.json('Error getting my own user information')
         })
 }
 
 exports.login = (req, res) => {
-    User.findOne({email: req.body.email}, (err, user) => {
-        if(err) {
-            res.json({ error: 'Server error when trying to find user matching email',
-            email: req.body.email})
-            return
-        }
-        if(!user){
-            res.json({error: 'No user found'})
-            return
-        }
-        //si existe el usuario con ese email, compruebo la contraseña
-        var passwordIsValid = bcrypt.compareSync(req.body.pass, user.pass)
-        if(!passwordIsValid){
-            res.json({auth: false, toekn: null})
-            return
-        }
+    var query = { email : req.body.email }
+    User.findOne(query)
+        .then((user) => {
+            if(!user){
+                return res.json({ error: 'User not found' })
+            }
+            var passwordIsValid = bcrypt.compareSync(req.body.pass, user.pass)
 
-        var token = jwt.sign({id: user._id}, config.secret, {
-            expiresIn: 86400
+            if(!passwordIsValid){
+                return res.json({auth: false, token: null})
+            }
+    
+            var token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
+
+            return res.json({ auth: true, token: token})
+
+        }).catch((err) => {
+            return res.json({error : 'Login error', err})
         })
-
-        res.json({ auth: true, token: token})
-    })
 }
 

@@ -2,20 +2,15 @@
 
 var express = require('express')
 var router = express.Router()
-const Game = require('../../models/Game')
 var verifyToken = require('./auth/verifyToken')
 var gameController = require('../../controllers/gameController')
 
-// Get games
-router.get('/',verifyToken,gameController.get)
+router.get('/',verifyToken,gameController.getGames)
 
-// Post games
-router.post('/',verifyToken,gameController.post)
+router.post('/',verifyToken,gameController.postGame)
 
-// Sign up to game
-router.post('/signup/:id',verifyToken,gameController.signup)
+router.post('/signup/:id',verifyToken,gameController.signUpGame)
 
-// Delete game
-router.delete('/:id',verifyToken,gameController.delete)
+router.delete('/:id',verifyToken,gameController.deleteGame)
 
 module.exports = router

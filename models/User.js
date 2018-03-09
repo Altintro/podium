@@ -24,14 +24,5 @@ const userSchema = Schema({
     gamesUpcoming: [{ type: Schema.Types.ObjectId, ref: 'Game'}]
 })
 
-userSchema.statics.list = (filter, limit, skip, fields, sort, callback) => {
-    const query = User.find(filter)
-    query.limit(limit)
-    query.skip(skip)
-    query.sort(sort)
-    query.select('-pass')
-    query.populate('gamesPlaying').exec(callback)
-}
-
 var User = mongoose.model ('User', userSchema)
 module.exports = User

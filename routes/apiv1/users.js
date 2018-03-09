@@ -2,13 +2,11 @@
 
 var express = require('express');
 var router = express.Router();
-const User = require('../../models/User')
 var verifyToken = require('./auth/verifyToken')
 var userController = require('../../controllers/userController')
  
-router.get('/',verifyToken, userController.get)
+router.get('/',verifyToken, userController.getUsers)
 
-// Delete
-router.delete('/:id', verifyToken, userController.delete)
+router.delete('/:id', verifyToken, userController.deleteUser)
 
 module.exports = router;
