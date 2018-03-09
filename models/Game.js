@@ -11,7 +11,9 @@ const gameSchema = Schema({
     wins: { type: Schema.Types.ObjectId, ref: 'Team' },
     loses: { type: Schema.Types.ObjectId, ref: 'Team' },
     concluded: Boolean,
-    date: Date
+    date: Date,
+    latitude: Number,
+    longitude: Number
 })
 
 var Game = mongoose.model ('Game', gameSchema)
