@@ -10,10 +10,10 @@ const gameSchema = Schema({
     participants: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     wins: { type: Schema.Types.ObjectId, ref: 'Team' },
     loses: { type: Schema.Types.ObjectId, ref: 'Team' },
-    concluded: Boolean,
-    date: Date,
-    latitude: Number,
-    longitude: Number
+    concluded: { type: Boolean, default : false },
+    date: { type: Date, default: Date.now() },
+    latitude: { type: Number, default: 0 },
+    longitude: { type: Number, default: 0 }
 })
 
 var Game = mongoose.model ('Game', gameSchema)

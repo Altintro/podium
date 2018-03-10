@@ -10,11 +10,11 @@ const tournamentSchema = Schema({
     players: [{ type: Schema.Types.ObjectId, ref: 'User'}],
     levelAverage: { type: String, default : "" },
     clasification: [{ type: Schema.Types.ObjectId, ref: 'Clasification'}],
-    starts: Date,
-    finishes: Date,
-    longitude: Number,
-    latitude: Number,
-    open: Boolean
+    starts: { type: Date, default: Date.now() },
+    finishes: { type: Date, default: Date.now() },
+    longitude: { type: Number, default: 0 },
+    latitude: { type: Number, default: 0 },
+    open: { type: Boolean, default: true }
 })
 
 var Tournament = mongoose.model ('Tournament', tournamentSchema)
