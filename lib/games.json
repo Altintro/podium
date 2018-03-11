@@ -1,22 +1,26 @@
-
-name: { type: String, default: "" },
-sport: { type: Schema.Types.ObjectId, ref: 'Sport' },
-tournament: { type: Schema.Types.ObjectId, ref: 'Tournament' },
-participants: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
-wins: { type: Schema.Types.ObjectId, ref: 'Team' },
-loses: { type: Schema.Types.ObjectId, ref: 'Team' },
-concluded: Boolean,
-date: Date
-
 [
     {
     "name": "Futbol para mayores de 40",
-    "date": "12/04/2018",
-    "concluded": false
+    "date": "04/12/2018",
+    "concluded": false,
+    "sport": "Fútbol"
     },
     {
-        "name": "Futbol para mayores de 40",
-        "date": "12/04/2018",
-        "concluded": false
-        }
+    "name": "Finde de Tenis en Madrid",
+    "date": "04/15/2018",
+    "concluded": false,
+    "sport": "Tenis"
+    },
+    {
+    "name": "Ajedrez para principiantes",
+    "date": "04/19/2018",
+    "concluded": false,
+    "sport": "Ajedrez"
+    },
+    {
+    "name": "Poker modalidad Holdem",
+    "date": "04/29/2018",
+    "concluded": false,
+    "sport": "Poker"
+    }
 ]
