@@ -1,1 +1,22 @@
 
+name: { type: String, default: "" },
+sport: { type: Schema.Types.ObjectId, ref: 'Sport' },
+tournament: { type: Schema.Types.ObjectId, ref: 'Tournament' },
+participants: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
+wins: { type: Schema.Types.ObjectId, ref: 'Team' },
+loses: { type: Schema.Types.ObjectId, ref: 'Team' },
+concluded: Boolean,
+date: Date
+
+[
+    {
+    "name": "Futbol para mayores de 40",
+    "date": "12/04/2018",
+    "concluded": false
+    },
+    {
+        "name": "Futbol para mayores de 40",
+        "date": "12/04/2018",
+        "concluded": false
+        }
+]
