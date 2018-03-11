@@ -6,6 +6,18 @@ var bcrypt = require('bcryptjs')
 
 const User = require('../models/User')
 
+function mapBasicUser(user) {
+    return {
+        _id: user.id,
+        alias: user.alias,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic
+    }
+}
+
+exports.mapBasicUser = mapBasicUser
+
 exports.register = (req,res, next) => {
     var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
     User.create({

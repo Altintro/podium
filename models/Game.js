@@ -10,10 +10,13 @@ const gameSchema = Schema({
     participants: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     wins: { type: Schema.Types.ObjectId, ref: 'Team' },
     loses: { type: Schema.Types.ObjectId, ref: 'Team' },
+    open: {type: Boolean, default: true, index: true },
     concluded: { type: Boolean, default : false },
     date: { type: Date, default: Date.now() },
     latitude: { type: Number, default: 0 },
-    longitude: { type: Number, default: 0 }
+    longitude: { type: Number, default: 0 },
+    modality: { type: String, default: 'individual'},
+    levelAverage: { type: String, default: '' }
 })
 
 var Game = mongoose.model ('Game', gameSchema)

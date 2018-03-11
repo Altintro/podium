@@ -14,7 +14,8 @@ const tournamentSchema = Schema({
     finishes: { type: Date, default: Date.now() },
     longitude: { type: Number, default: 0 },
     latitude: { type: Number, default: 0 },
-    open: { type: Boolean, default: true }
+    open: { type: Boolean, default: true },
+    modality: { type: String, default: 'individual'}
 })
 
 var Tournament = mongoose.model ('Tournament', tournamentSchema)

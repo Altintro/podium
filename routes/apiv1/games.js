@@ -8,6 +8,7 @@ var authController = require('../../controllers/authController')
 router.use(authController.verifyToken)
 
 router.get('/',gameController.getGames)
+router.get('/:id',gameController.getGame)
 router.post('/',gameController.postGame)
 router.post('/signup/:id',gameController.signUpGame)
 router.delete('/:id',gameController.deleteGame)

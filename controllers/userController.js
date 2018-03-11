@@ -1,4 +1,6 @@
 'use_strict'
+
+const mapBasicUser = require('./userAccountController').mapBasicUser
 const User = require('../models/User')
 
 exports.getUsers = (req, res, next) => {
@@ -13,30 +15,22 @@ exports.getUsers = (req, res, next) => {
     if(name) { filter.name = { $regex: '^'+ name, $options: 'i' }}
     if(alias){ filter.alias = { $regex: '^'+ alias, $options: 'i' }}
 
-    User.find(filter)
-        .select('-pass')
-        .limit(limit)
-        .sort(sort)
-        .populate('gamesPlaying')
-        .exec().then((users) => {
-          return res.json({result: users})
+    User.find(filter).select('-pass').limit(limit).sort(sort).exec().then((users) => {
+            users = users.map(mapBasicUser)
+            return res.json({result: users})
         }).catch((err) => {
-          return next(err) 
+            return next(err) 
         })
 }
 
-exports.me = (req,res, next) => {
-  console.log(req.userId)
-  User.findById(req.userId)
-      .select('-pass')
-      .then((user) => {
-          if(!user) { 
-              return res.json({error: 'No user found'})
-          }
-          return res.json({me: user})
-      }).catch((err) => {
-          return next(err)
-      })
+exports.getUser = (req, res, next) => {
+    // With games in query as true, should populate all games properties
+    let gamesPlaying = req.query.games ? 'gamesPlaying' : ''
+    User.findById(req.params.id).select('-pwd').populate(gamesPlaying).exec().then((user) => {
+        return res.json({user})
+    }).catch((err) => {
+        return next(err)
+    })
 }
 
 exports.deleteUser =  (req,res,next) => {

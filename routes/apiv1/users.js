@@ -14,7 +14,7 @@ router.post('/login',userAccountController.login )
 router.use(authController.verifyToken);
 
 router.get('/', userController.getUsers)
-router.get('/me', userController.me)
+router.get('/:id', userController.getUser)
 router.delete('/:id', userController.deleteUser)
 
 module.exports = router;

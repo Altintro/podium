@@ -9,7 +9,6 @@ const sportSchema = Schema({
     description: { type: String, default: ""},
     rules: { type: String, default: ""},
     popularity: { type: Number, default: 0 },
-    modality: { type: String, default: "individual" },
     tournaments: [{type: Schema.Types.ObjectId, ref: 'Tournament'}],
     ranking: [{type: Schema.Types.ObjectId, ref: 'User'}]
 })

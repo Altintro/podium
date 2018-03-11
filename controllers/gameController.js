@@ -4,6 +4,17 @@ const Team = require('../models/Team')
 const User = require('../models/User')
 const Sport = require('../models/Sport')
 
+function mapBasicGame(game) {
+    return {
+        _id: game.id,
+        name: game.name,
+        sport: game.sport,
+        levelAverage: game.levelAverage,
+        open: game.open,
+        modality: game.modality
+    }
+}
+
 exports.getGames = (req, res, next) => {
 
     const limit = parseInt(req.query.limit)
@@ -13,12 +24,22 @@ exports.getGames = (req, res, next) => {
     Game.find(filter)
         .limit(limit)
         .sort(sort)
-        .populate('participants')
+        .populate('sport')
         .exec().then((games) => {
+            games = games.map(mapBasicGame)
             return res.json({ result: games })
         }).catch((err) => {
             return next(err)
         })
+}
+
+exports.getGame = (req, res, next) => {
+    let participants = req.query.participants ? 'participants' : ''
+    Game.findById(req.params.id).select('-pwd').populate(participants).exec().then((game) => {
+        return res.json({game})
+    }).catch((err) => {
+        return next(err)
+    })
 }
 
 exports.postGame = (req, res, send) => {
@@ -28,7 +49,7 @@ exports.postGame = (req, res, send) => {
     }).then((team) => {
         return Game.create({
             name: req.body.name,
-            participants: [team._id]
+            participants: [team._id],
         })
     }).then((game) => {
         var query = { _id: req.userId }
@@ -62,8 +83,14 @@ exports.signUpGame = (req, res, send) => {
 exports.deleteGame =  (req,res,next) => {
  
     var query = { _id: req.params.id }
-    Game.deleteOne(query).then(() => {
-        return res.json({ deleted: true })
+    Game.findOneAndRemove(query).then((game) => {
+        var teamQuery = {$or:[]}
+        game.participants.map((teamId) => {
+            teamQuery.$or.push({_id: teamId})
+        })
+        return Team.deleteMany(teamQuery)
+    }).then(() => {
+        return res.json({deleted: true})
     }).catch((err) => {
         return next(err)
     })
