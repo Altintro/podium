@@ -6,7 +6,7 @@ exports.getUsers = (req, res, next) => {
     const limit = parseInt(req.query.limit)
     const fields = req.query.fields
     const sort = req.query.sort 
-    // Make filter generation function
+  
     const filter = {}
     const name = req.query.name
     const alias = req.query.alias

@@ -6,8 +6,7 @@ var bcrypt = require('bcryptjs')
 
 const User = require('../models/User')
 
-exports.register = (req,res) => {
-    console.log(req.body)
+exports.register = (req,res, next) => {
     var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
     User.create({
 
@@ -17,17 +16,18 @@ exports.register = (req,res) => {
         pass: hashedPassword
 
     }).then((user) => {
+        console.log(config.secret)
         var token = jwt.sign({id: user._id },
             config.secret, {
             expiresIn: 86400 //expires in 24 hours
         })
-        res.json({auth: true, token: token})
+        return res.json({auth: true, token: token})
     }).catch((err) => {
-        return res.json({error: 'Error registering new user'})
+        return next(err)
     })
 }
 
-exports.me = (req,res) => {
+exports.me = (req,res, next) => {
     console.log(req.userId)
     User.findById(req.userId)
         .select('-pass')
@@ -37,11 +37,11 @@ exports.me = (req,res) => {
             }
             return res.json({me: user})
         }).catch((err) => {
-            return res.json('Error getting my own user information')
+            return next(err)
         })
 }
 
-exports.login = (req, res) => {
+exports.login = (req, res, next) => {
     var query = { email : req.body.email }
     User.findOne(query)
         .then((user) => {
@@ -59,7 +59,7 @@ exports.login = (req, res) => {
             return res.json({ auth: true, token: token})
 
         }).catch((err) => {
-            return res.json({error : 'Login error', err})
+            return next(err)
         })
 }
 

@@ -41,9 +41,9 @@ exports.deleteTournament =  (req,res,next) => {
 
     var query = { _id: req.params.id }
     Tournament.deleteOne(query).then(() => {
-        res.json({ deleted: true })
+        return res.json({ deleted: true })
     }).catch((err) => {
-        res.json(err)
+        return next(err)
     })
 }
 
@@ -58,9 +58,9 @@ exports.signUpTournament = (req, res, send) => {
         return User.update(query,operation)
     })
     .then(()=> {
-        res.json({success: 'User signed-up to tournament'})
+        return res.json({success: 'User signed-up to tournament'})
     })
     .catch((err) => {
-        res.json({error:'Error signing up to tournament',err})
+        return res.json({error:'Error signing up to tournament',err})
     })
 }

@@ -4,7 +4,7 @@ const Team = require('../models/Team')
 const User = require('../models/User')
 const Sport = require('../models/Sport')
 
-exports.getGames = (req,res,send) => {
+exports.getGames = (req, res, next) => {
 
     const limit = parseInt(req.query.limit)
     const sort = req.query.sort
@@ -53,9 +53,9 @@ exports.signUpGame = (req, res, send) => {
         var operation = { $push: { gamesPlaying: req.params.id }}
         return User.update(query,operation)
     }).then(() => {
-        res.json({success: 'User signed-up to game'})
+        return res.json({success: 'User signed-up to game'})
     }).catch((err) => {
-        res.json({error: 'Error signing-up to game', err})
+        return res.json({error: 'Error signing-up to game', err})
     })
 }
 
@@ -63,8 +63,8 @@ exports.deleteGame =  (req,res,next) => {
  
     var query = { _id: req.params.id }
     Game.deleteOne(query).then(() => {
-        res.json({ deleted: true })
+        return res.json({ deleted: true })
     }).catch((err) => {
-        res.json(err)
+        return next(err)
     })
 }
