@@ -9,24 +9,40 @@
 	```
 	npm install
 	```
-	
-4. Start the server
-	
-	```
-	npm start
-	```
-5. Initialize Database: Open a different terminal tab (make sure MongoDB is running before running the command)
+4. Create **config.js** file, that exports the app secret and db authentication credentials. (If you are going to run this app in local, use your own db credentials -> *connectMongoose.js file*
 
- 	```
+	```
+	'use_strict'
+	
+	module.exports {
+		'secret': 'appsecret',
+		'db': 'dbname',
+		'dbuser': 'dbuser',
+		'dbpass': 'dbpassword'
+	}
+	```
+	
+4. Initialize Database: Open a different terminal tab (make sure MongoDB is running before running the command:
+	
+	```
  	npm run initDB 
  	```
+ 
+	
+5. Start the server
+	
+	```
+	npm start or nodemon
+	```
+
+ 	
  	
 
 ## Authentication
 
 This server needs authentication in every request , in order to make requests you will need to be register as an *User* and have an **access token**, to get a token, follow the next steps:
 	
-* **Registration**: do a *post* request to */apiv1/auth/register*, the post must have a body with the registration fields: name, alias, email, password:
+* **Registration**: do a *post* request to */apiv1/users/register*, the post must have a body with the registration fields: name, alias, email, password:
 	
 		{ 
 		name:  'name'
@@ -39,7 +55,7 @@ This server needs authentication in every request , in order to make requests yo
 	**IMPORTANT**: The response for the request will be an *access token* that should be use in 	**every request as a header** (x-access-token) in order to get a response 	from the server. Copy the token and save it for further requests.
 		
 		
-* **Login**: If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/auth/login. the post must have a body with the login fields: email, password:
+* **Login**: If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/users/login. the post must have a body with the login fields: email, password:
 	
 		{
 		email: 'email',
@@ -48,7 +64,7 @@ This server needs authentication in every request , in order to make requests yo
 
 	The response for the request will be an *access token* that should be use in **every request as a header** (x-access-token) in order to get a response from the server.
 	
-* **/me**: In order to know if you are logged into the server, you can do a *get* request to /me with your *access token** as a header of the request. The response will be your user information.
+* **/me**: In order to know if you are logged into the server, you can do a *get* request to /apiv1/users/me with your *access token** as a header of the request. The response will be your user information.
 	
 
 ## Usage
