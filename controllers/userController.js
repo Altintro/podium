@@ -25,6 +25,20 @@ exports.getUsers = (req, res, next) => {
         })
 }
 
+exports.me = (req,res, next) => {
+  console.log(req.userId)
+  User.findById(req.userId)
+      .select('-pass')
+      .then((user) => {
+          if(!user) { 
+              return res.json({error: 'No user found'})
+          }
+          return res.json({me: user})
+      }).catch((err) => {
+          return next(err)
+      })
+}
+
 exports.deleteUser =  (req,res,next) => {
     var query = {_id: req.params.id}
     User.deleteOne(query).exec().then((user) => {

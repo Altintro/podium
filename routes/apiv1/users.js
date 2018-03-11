@@ -2,11 +2,19 @@
 
 var express = require('express');
 var router = express.Router();
-var verifyToken = require('./auth/verifyToken')
 var userController = require('../../controllers/userController')
- 
-router.get('/',verifyToken, userController.getUsers)
+var userAccountController = require('../../controllers/userAccountController')
+var authController = require('../../controllers/authController')
 
-router.delete('/:id', verifyToken, userController.deleteUser)
+// Auth
+router.post('/register', userAccountController.register)
+router.post('/login',userAccountController.login )
+
+// Others
+router.use(authController.verifyToken);
+
+router.get('/', userController.getUsers)
+router.get('/me', userController.me)
+router.delete('/:id', userController.deleteUser)
 
 module.exports = router;
