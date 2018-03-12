@@ -11,10 +11,14 @@ router.post('/register', userAccountController.register)
 router.post('/login',userAccountController.login )
 
 // Others
-router.use(authController.verifyToken);
 
+// No token required
 router.get('/', userController.getUsers)
 router.get('/:id', userController.getUser)
+
+// Token required
+router.use(authController.verifyToken);
+
 router.delete('/:id', userController.deleteUser)
 
 module.exports = router;
