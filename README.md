@@ -117,7 +117,7 @@ Once you've registered and have an *access-token* you will be able to get respon
 	```
 	{
 	name: 'name',
-	compType: 'sport',
+	compType: 'compType',
 	}
 	
 	```
