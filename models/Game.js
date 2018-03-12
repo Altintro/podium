@@ -4,8 +4,9 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const gameSchema = Schema({
-    name: { type: String, default: "" },
+    name: { type: String, default: '' },
     sport: { type: Schema.Types.ObjectId, ref: 'Sport' },
+    description: { type: String, default: '' },
     tournament: { type: Schema.Types.ObjectId, ref: 'Tournament' },
     participants: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     wins: { type: Schema.Types.ObjectId, ref: 'Team' },
@@ -15,7 +16,7 @@ const gameSchema = Schema({
     date: { type: Date, default: Date.now() },
     latitude: { type: Number, default: 0 },
     longitude: { type: Number, default: 0 },
-    modality: { type: String, default: 'individual'},
+    modality: { type: String, default: 'individual' },
     levelAverage: { type: String, default: '' }
 })
 
