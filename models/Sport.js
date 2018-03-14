@@ -4,13 +4,15 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const sportSchema = Schema({
-    name: {type : String, default : "", required: true,  index: { unique: true, dropDups: true }},
+    name: {type : String, default : "" ,  index: { unique: true, required: true, dropDups: true }},
     image: { type: String, default: ""} ,
     description: { type: String, default: ""},
     rules: { type: String, default: ""},
-    popularity: Number,
-    modality: { type: String, default: "individual" },
-    tournaments: [{type: Schema.Types.ObjectId, ref: 'Tournament'}],
+    popularity: { type: Number, default: 0 },
+    activeTournaments: [{ type: Schema.Types.ObjectId, ref: 'Tournament'}],
+    openTournaments: [{ type: Schema.Types.ObjectId, ref: 'Tournament'}],
+    activeGames: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
+    openGames: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
     ranking: [{type: Schema.Types.ObjectId, ref: 'User'}]
 })
 

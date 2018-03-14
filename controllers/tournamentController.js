@@ -4,72 +4,85 @@ const User = require('../models/User')
 const Sport = require('../models/Sport')
 const Team = require('../models/Team')
 
-exports.get = (req,res,send) => {
+function mapBasicTournament(tournament) {
+    return {
+        _id: tournament.id,
+        name: tournament.name,
+        sport: tournament.sport,
+        compType: tournament.compType,
+        levelAverage: tournament.levelAverage,
+        open: tournament.open,
+        modality: tournament.modality
+    }
+}
 
-    const name = req.query.name
+exports.getTournaments = (req,res,send) => {
 
     const limit = parseInt(req.query.limit)
-    const skip = parseInt(req.query.skip)
     const fields = req.query.fields
     const sort = req.query.sort
 
-    console.log(req.user)
-
     const filter = {}
+    const name = req.query.name
     if(name) { filter.name = { $regex: '^'+name, $options: 'i' }}
 
-    Tournament.list(filter,limit,skip,fields,sort, (err, tournaments) => {
-        if(err) {
-            next(err)
-            return
-        }
-        res.json({success: true, results: tournaments})
+    Tournament.find(filter)
+              .limit(limit)
+              .sort(sort)
+              .populate('sport')
+              .exec().then((tournaments) => {
+                tournaments = tournaments.map(mapBasicTournament)
+                return res.json({results: tournaments})
+              }).catch((err) => {
+                return next(err)
+              })
+}
+
+exports.getTournament = (req, res, next) => {
+    let participants = req.query.participants ? 'participants' : ''
+    Tournament.findById(req.params.id).select('-pwd').populate(participants).exec().then((tournament) => {
+        return res.json({tournament})
+    }).catch((err) => {
+        return next(err)
     })
 }
 
-exports.post = (req, res, send) => {
+exports.postTournament = (req, res, send) => {
 
     Tournament.create({
-        
         name: req.body.name,
-        compType: req.body.compType, // Sport, description....
-
-    }, (err, tournament) => {
-        if(err){
-            res.json({error: 'Error posting tournament'})
-            return
-        }
-
-        res.json({ success: true, tournamet: tournament })
+        compType: req.body.compType
+    }).then((tournament) => {
+        return res.json({ tournament: tournament })
+    }).catch((err)=> {
+        return res.json(err)
     })
 }
 
-exports.delete =  (req,res,next) => {
-    Tournament.deleteOne({_id: req.params.id}, (err, user) => {
-      if(err) {
-          res.json({ error: 'Error deleting tournament' + err})
-          return
-      }
-      res.json({deleted: true})
-    })
-}
+exports.deleteTournament =  (req,res,next) => {
 
-exports.signup = (req, res, send) => {
     var query = { _id: req.params.id }
-    var operation = { $push: { players: req.query.userid }}
-    Tournament.update(query, operation, (err) => {
-        if(err){
-            res.json({error:'Error sign up in tournament'})
-            return
-        }
-        var query = { _id: req.query.userid }
+    Tournament.deleteOne(query).then(() => {
+        return res.json({ deleted: true })
+    }).catch((err) => {
+        return next(err)
+    })
+}
+
+exports.signUpTournament = (req, res, send) => {
+
+    var query = { _id: req.params.id }
+    var operation = { $push: {players: req.userId }}
+    Tournament.update(query,operation)
+    .then(() => {
+        var query = { _id: req.userId }
         var operation = { $push: {tournamentsPlaying: req.params.id }}
-        User.update(query, operation, (err) => {
-            if(err) {
-                res.json({error: 'Error sign up in user'})
-                return
-            }
-            res.json({success: true, message: 'User signed up for tournament'})
-        })
+        return User.update(query,operation)
+    })
+    .then(()=> {
+        return res.json({success: 'User signed-up to tournament'})
+    })
+    .catch((err) => {
+        return res.json({error:'Error signing up to tournament',err})
     })
 }

@@ -4,27 +4,21 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const gameSchema = Schema({
-    name: { type: String, default: "" },
+    name: { type: String, default: '' },
     sport: { type: Schema.Types.ObjectId, ref: 'Sport' },
+    description: { type: String, default: '' },
     tournament: { type: Schema.Types.ObjectId, ref: 'Tournament' },
     participants: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     wins: { type: Schema.Types.ObjectId, ref: 'Team' },
     loses: { type: Schema.Types.ObjectId, ref: 'Team' },
-    concluded: Boolean,
-    date: Date,
-    longitude: Number,
-    latitude: Number,
-    description: String
+    open: {type: Boolean, default: true, index: true },
+    concluded: { type: Boolean, default : false },
+    date: { type: Date, default: Date.now() },
+    latitude: { type: Number, default: 0 },
+    longitude: { type: Number, default: 0 },
+    modality: { type: String, default: 'individual' },
+    levelAverage: { type: String, default: '' }
 })
-
-gameSchema.statics.list = function(filter, limit, skip, fields, sort, callback){
-    const query = Game.find(filter)
-    query.limit(limit)
-    query.skip(skip)
-    query.sort(sort)
-    query.select(fields)
-    query.exec(callback)
-}
 
 var Game = mongoose.model ('Game', gameSchema)
 module.exports = Game

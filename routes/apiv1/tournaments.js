@@ -3,20 +3,17 @@
 var express = require('express')
 var router = express.Router()
 const Tournament = require('../../models/Tournament')
-var verifyToken = require('./auth/verifyToken')
 var tournamentController = require('../../controllers/tournamentController')
+var authController = require('../../controllers/authController')
 
-// Get Tournaments
-router.get('/',verifyToken,tournamentController.get)
+router.get('/',tournamentController.getTournaments)
+router.get('/:id', tournamentController.getTournament)
 
-// Post Tournaments
-router.post('/',verifyToken, tournamentController.post)
+router.use(authController.verifyToken)
 
-//Sign up to tournament
-router.post('/singup/:id',verifyToken, tournamentController.signup) 
-
-// Delete
-router.delete('/:id',tournamentController.delete)
+router.post('/', tournamentController.postTournament)
+router.post('/signup/:id', tournamentController.signUpTournament) 
+router.delete('/:id',tournamentController.deleteTournament)
 
 
 module.exports = router

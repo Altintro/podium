@@ -5,34 +5,40 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const userSchema = Schema({
-    name: { type: String, default : ""},
+    name: { type: String, default : "" },
     alias: { type: String, default: "", index: { unique: true, dropDups: true } },
     pass: { type:String, default: "" },
-    email: {type: String, default: "", index: { unique: true, dropDups: true}},
-    image: {type: String, default: "" },
-    gender: {type: String, default: "" },
-    birthdate: Date,
-    latitude: Number,
-    longitude: Number,
-    ranking: [{ sport: String, ranking: Number, points: Number}],
+    email: { type: String, default: "", index: { unique: true, sparse: true, dropDups: true}},
+    profilePic: { type: String, default: "" },
+    gender: { type: String, default: "" },
+    birthdate:{ type: Date, default: Date.now() },
+    latitude: { type: Number, default: 0 },
+    longitude: { type: Number, default: 0 },
+    ranking: [{ sport: String, ranking: Number, points: Number }],
+
+    fb: {
+        id: { type: String, default: "", index: true },
+        name: { type: String, default: "" },
+        picture: {
+            data: {
+                url: { type: String, default: "" }
+            }
+        },
+        email: { type: String, default: "" }
+    },
+    hasPassword: { type: Boolean, default: true },
+    mergedWithFB: { type: Boolean, default: true },
+
     tournamentsPlayed: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     tournamentsPlaying: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     tournamentsWon: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     tournamentsUpcoming: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
+
     gamesPlayed: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
     gamesPlaying: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
     gamesWon: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
     gamesUpcoming: [{ type: Schema.Types.ObjectId, ref: 'Game'}]
 })
-
-userSchema.statics.list = (filter, limit, skip, fields, sort, callback) => {
-    const query = User.find(filter)
-    query.limit(limit)
-    query.skip(skip)
-    query.sort(sort)
-    query.select(fields)
-    query.populate('playing').exec(callback)
-}
 
 var User = mongoose.model ('User', userSchema)
 module.exports = User
