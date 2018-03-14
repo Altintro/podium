@@ -11,7 +11,10 @@ const gameSchema = Schema({
     wins: { type: Schema.Types.ObjectId, ref: 'Team' },
     loses: { type: Schema.Types.ObjectId, ref: 'Team' },
     concluded: Boolean,
-    date: Date
+    date: Date,
+    longitude: Number,
+    latitude: Number,
+    description: String
 })
 
 gameSchema.statics.list = function(filter, limit, skip, fields, sort, callback){
