@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var userController = require('../../controllers/userController')
 var userAccountController = require('../../controllers/userAccountController')
-var authController = require('../../controllers/authController')
+var authController = require('../../controllers/authController') 
 
 // Auth
 router.post('/register', userAccountController.register)
@@ -16,9 +16,13 @@ router.post('/login',userAccountController.login )
 router.get('/', userController.getUsers)
 router.get('/:id', userController.getUser)
 
+//Google and Facebobok
+router.post('/googleSignIn',authController.verifyGoogleToken,userAccountController.googleRegister)
+
 // Token required
 router.use(authController.verifyToken);
-
 router.delete('/:id', userController.deleteUser)
+
+
 
 module.exports = router;

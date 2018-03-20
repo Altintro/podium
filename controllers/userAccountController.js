@@ -21,12 +21,10 @@ exports.mapBasicUser = mapBasicUser
 exports.register = (req,res, next) => {
     var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
     User.create({
-
         name: req.body.name,
         alias: req.body.alias,
         email: req.body.email,
         pass: hashedPassword
-
     }).then((user) => {
         var token = jwt.sign({id: user._id },
             config.secret, {
@@ -58,4 +56,23 @@ exports.login = (req, res, next) => {
         }).catch((err) => {
             return next(err)
         })
+}
+
+
+exports.googleRegister = (req,res,next) => {
+    const googleInfo = req.googleInfo
+    if(!googleInfo) return next(new Error('No google info was found on the request'))
+    var user
+    User.find({ 'google.id': googleInfo.sub }).exec().then((users) => {
+        if(users.length != 0) return next(new Error('Already registered'))
+        return User.create({
+            google: googleInfo,
+            hasPassword : false,
+            mergedWithGoogle: true
+        })
+    }).then((user) => {
+        return res.json({auth: true, token: req.query.googleToken })
+    }).catch((err) => {
+        return next(err)
+    })
 }

@@ -13,6 +13,7 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "google-auth-library": "^1.3.2",
+    "google-id-token-verifier": "^0.2.3",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.9",
