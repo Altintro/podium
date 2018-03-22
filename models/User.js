@@ -34,8 +34,8 @@ const userSchema = Schema({
     },
 
     hasPassword: { type: Boolean, default: true },
-    mergedWithFB: { type: Boolean, default: true },
-    mergedWithGoogle: {type: Boolean, default: true},
+    mergedWithFB: { type: Boolean, default: false },
+    mergedWithGoogle: {type: Boolean, default: false},
 
     tournamentsPlayed: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     tournamentsPlaying: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],

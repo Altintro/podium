@@ -1,7 +1,7 @@
 'use_strict'
 
 var express = require('express')
-var router = express.Router()
+var router = require('express-promise-router')()
 var gameController = require('../../controllers/gameController')
 var authController = require('../../controllers/authController')
 
