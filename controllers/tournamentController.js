@@ -5,6 +5,7 @@ const Sport = require('../models/Sport')
 const Team = require('../models/Team')
 
 function mapBasicTournament(tournament) {
+    
     return {
         _id: tournament.id,
         name: tournament.name,
@@ -36,6 +37,7 @@ exports.getTournaments = async (req, res, send) => {
 }
 
 exports.getTournament = async (req, res, next) => {
+
     let participants = req.query.participants ? 'participants' : ''
     const tournament = await Tournament.findById(req.params.id)
     .select('-pwd')
@@ -45,6 +47,7 @@ exports.getTournament = async (req, res, next) => {
 }
 
 exports.postTournament = async (req, res, send) => {
+
     const tournament = await Tournament.create({
         name: req.body.name,
         compType: req.body.compType
@@ -53,12 +56,14 @@ exports.postTournament = async (req, res, send) => {
 }
 
 exports.deleteTournament = async (req, res, next) => {
+
     var query = { _id: req.params.id }
     await Tournament.deleteOne(query)
     return res.status(200).json({ deleted: true })
 }
 
 exports.signUpTournament = async (req, res, send) => {
+
     var query = { _id: req.params.id }
     var operation = { $push: {players: req.userId }}
     await Tournament.update(query,operation)

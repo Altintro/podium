@@ -3,6 +3,7 @@
 var jwt = require('jsonwebtoken')
 var config = require('../config')
 var bcrypt = require('bcryptjs')
+var mailSender = require('./../utils/mailSender')
 
 const {OAuth2Client} = require('google-auth-library');
 const googleClientId = config.google_client_id
@@ -12,6 +13,7 @@ const client = new OAuth2Client(googleClientId);
 const User = require('../models/User')
 
 function mapBasicUser(user) {
+
     return {
         _id: user.id,
         alias: user.alias,
@@ -24,6 +26,7 @@ function mapBasicUser(user) {
 exports.mapBasicUser = mapBasicUser
 
 exports.register = async (req, res, next) => {
+
     var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
     const user = await User.create({
         name: req.body.name,
@@ -49,13 +52,15 @@ exports.login = async (req, res, next) => {
 }
 
 exports.checkEmail = async (req, res, next) => {
+
     var query = { email: req.query.email }
     const user = await User.findOne(query)
-    if(!user) return res.status(404).json({ result: 'User does not exist with the requested email'})
-    return res.status(200).json({ result: 'Email belongs to existing user' })
+    if(!user) return res.status(404).json({ exists: false })
+    return res.status(200).json({ exists: true })
 }
 
 exports.checkAlias = async (req, res, next) => {
+
     var query = { alias: req.query.alias }
     const user = await User.findOne(query)
     if(!user) return res.status(404).json({ result: 'User does not exist with the requested alias' })
@@ -63,12 +68,14 @@ exports.checkAlias = async (req, res, next) => {
 }
 
 exports.google = async (req,res,next) => {
+
     var googleToken = req.query.googleToken || 'xxx'
     const info = await client.verifyIdToken({
         idToken: googleToken,
         audience: googleClientId})
     const payload = info.payload
     var user = await User.findOne({ email: payload.email })
+
     if(user) {
 
         if(!user.mergedWithGoogle) {
@@ -83,6 +90,7 @@ exports.google = async (req,res,next) => {
         }
  
     } else {
+
         console.log('Google Sign up!')
         user = await User.create({
             google: payload,

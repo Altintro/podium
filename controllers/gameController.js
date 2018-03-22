@@ -16,6 +16,7 @@ function mapBasicGame(game) {
 }
 
 exports.getGames = async (req, res, next) => {
+
     const limit = parseInt(req.query.limit)
     const sort = req.query.sort
     const filter = {}
@@ -29,6 +30,7 @@ exports.getGames = async (req, res, next) => {
 }
 
 exports.getGame = async (req, res, next) => {
+
     let participants = req.query.participants ? 'participants' : ''
     const game = await Game.findById(req.params.id)
     .select('-pwd')
@@ -38,6 +40,7 @@ exports.getGame = async (req, res, next) => {
 }
 
 exports.postGame = async (req, res, send) => {
+
     const team = await Team.create({  players:[{ _id: req.userId }] })
     const game = await Game.create({ 
         name: req.body.name,
@@ -50,6 +53,7 @@ exports.postGame = async (req, res, send) => {
 }
 
 exports.signUpGame = async (req, res, send) => {
+
     // TODO: Check for user already in a team
     const team = await Team.create({ players: [{ _id: req.userId}] })
     var query = { _id: req.params.id }
@@ -63,6 +67,7 @@ exports.signUpGame = async (req, res, send) => {
 }
 
 exports.deleteGame = async (req,res,next) => {
+    
     var query = { _id: req.params.id }
     const game =  Game.findOneAndRemove(query)
     var teamQuery = {$or:[]}

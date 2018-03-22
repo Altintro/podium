@@ -21,6 +21,7 @@ exports.getUsers = async (req, res, next) => {
 }
 
 exports.getUser = async (req, res, next) => {
+
     // With games in query as true, should populate all games properties
     let gamesPlaying = req.query.games ? 'gamesPlaying' : ''
     const user = await User.findById(req.params.id).select('-pwd').populate(gamesPlaying).exec()
@@ -28,6 +29,7 @@ exports.getUser = async (req, res, next) => {
 }
 
 exports.deleteUser = async (req,res,next) => {
+    
     var query = {_id: req.params.id}
     await User.deleteOne(query).exec()
     return res.status(200).json({ deleted: true})

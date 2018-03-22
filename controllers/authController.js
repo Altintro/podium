@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken')
 var config = require('../config')
 
 function verifyToken(req,res,next) {
+
     var token = req.headers['x-access-token']
     if(!token) {
         res.json({auth: false, message: 'No token provided'})
@@ -11,6 +12,7 @@ function verifyToken(req,res,next) {
     }
 
     jwt.verify(token, config.secret, (err,decoded)=> {
+        
         if(err){
             res.json({auth: false, message: 'Failed to authenticate token'})
             return
