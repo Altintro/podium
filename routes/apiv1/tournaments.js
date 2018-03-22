@@ -1,7 +1,7 @@
 'use_strict'
 
 var express = require('express')
-var router = express.Router()
+var router = require('express-promise-router')()
 const Tournament = require('../../models/Tournament')
 var tournamentController = require('../../controllers/tournamentController')
 var authController = require('../../controllers/authController')

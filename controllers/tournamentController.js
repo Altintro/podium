@@ -16,7 +16,7 @@ function mapBasicTournament(tournament) {
     }
 }
 
-exports.getTournaments = (req,res,send) => {
+exports.getTournaments = async (req, res, send) => {
 
     const limit = parseInt(req.query.limit)
     const fields = req.query.fields
@@ -26,63 +26,44 @@ exports.getTournaments = (req,res,send) => {
     const name = req.query.name
     if(name) { filter.name = { $regex: '^'+name, $options: 'i' }}
 
-    Tournament.find(filter)
-              .limit(limit)
-              .sort(sort)
-              .populate('sport')
-              .exec().then((tournaments) => {
-                tournaments = tournaments.map(mapBasicTournament)
-                return res.json({results: tournaments})
-              }).catch((err) => {
-                return next(err)
-              })
+    var tournaments = await Tournament.find(filter)
+    .limit(limit)
+    .sort(sort)
+    .populate('sport')
+    .exec()
+    tournaments = tournaments.map(mapBasicTournament)
+    return res.status(200).json({ results: tournaments })
 }
 
-exports.getTournament = (req, res, next) => {
+exports.getTournament = async (req, res, next) => {
     let participants = req.query.participants ? 'participants' : ''
-    Tournament.findById(req.params.id).select('-pwd').populate(participants).exec().then((tournament) => {
-        return res.json({tournament})
-    }).catch((err) => {
-        return next(err)
-    })
+    const tournament = await Tournament.findById(req.params.id)
+    .select('-pwd')
+    .populate(participants)
+    .exec()
+    return res.status(200).json({ result: tournament })
 }
 
-exports.postTournament = (req, res, send) => {
-
-    Tournament.create({
+exports.postTournament = async (req, res, send) => {
+    const tournament = await Tournament.create({
         name: req.body.name,
         compType: req.body.compType
-    }).then((tournament) => {
-        return res.json({ tournament: tournament })
-    }).catch((err)=> {
-        return res.json(err)
     })
+    return res.status(200).json({ result: tournament })
 }
 
-exports.deleteTournament =  (req,res,next) => {
-
+exports.deleteTournament = async (req, res, next) => {
     var query = { _id: req.params.id }
-    Tournament.deleteOne(query).then(() => {
-        return res.json({ deleted: true })
-    }).catch((err) => {
-        return next(err)
-    })
+    await Tournament.deleteOne(query)
+    return res.status(200).json({ deleted: true })
 }
 
-exports.signUpTournament = (req, res, send) => {
-
+exports.signUpTournament = async (req, res, send) => {
     var query = { _id: req.params.id }
     var operation = { $push: {players: req.userId }}
-    Tournament.update(query,operation)
-    .then(() => {
-        var query = { _id: req.userId }
-        var operation = { $push: {tournamentsPlaying: req.params.id }}
-        return User.update(query,operation)
-    })
-    .then(()=> {
-        return res.json({success: 'User signed-up to tournament'})
-    })
-    .catch((err) => {
-        return res.json({error:'Error signing up to tournament',err})
-    })
+    await Tournament.update(query,operation)
+    var query = { _id: req.userId }
+    var operation = { $push: {tournamentsPlaying: req.params.id }}
+    await User.update(query,operation)
+    return res.status(200).json({result: 'User signed-up to tournament'})   
 }

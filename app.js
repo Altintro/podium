@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 
 //Stablish connection to database
 require('./lib/connectMongoose');
-
 var app = express();
 
 // view engine setup
@@ -43,7 +42,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  // res.render('error');
+  res.json({ message: err.message, status: res.status })
 });
 
 module.exports = app;

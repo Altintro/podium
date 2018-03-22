@@ -40,7 +40,9 @@
 
 ## Authentication
 
-This server needs authentication in every request , in order to make requests you will need to be register as an *User* and have an **access token**, to get a token, follow the next steps:
+This server needs authentication for most of requests , in order to make requests you will need to be register as an *User* and have an **access token**.
+
+**IMPORTANT**: The response for the register/login requests will be an *access token* that should be use in 	**every request as a header** (x-access-token) in order to get a response from the server. Copy the token and save it for further requests.
 	
 * **Registration**: do a *post* request to */apiv1/users/register*, the post must have a body with the registration fields: name, alias, email, password:
 	
@@ -50,9 +52,6 @@ This server needs authentication in every request , in order to make requests yo
 		pass:  'password',
 		email: 'useremail'
 		}
-		  
-		
-	**IMPORTANT**: The response for the request will be an *access token* that should be use in 	**every request as a header** (x-access-token) in order to get a response 	from the server. Copy the token and save it for further requests.
 		
 		
 * **Login**: If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/users/login. the post must have a body with the login fields: email, password:
@@ -63,6 +62,9 @@ This server needs authentication in every request , in order to make requests yo
 		}
 
 	The response for the request will be an *access token* that should be use in **every request as a header** (x-access-token) in order to get a response from the server.
+	
+* **Google Register/Login:** do a post request to */apiv1/users/google?googleToken=google_idToken*. Google idToken will be extracted from athentication object when accesing the google login feature through the app.
+
 	
 
 ## Usage

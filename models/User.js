@@ -26,8 +26,17 @@ const userSchema = Schema({
         },
         email: { type: String, default: "" }
     },
+
+    google: {
+        sub: { type: String, default: "", index: true },
+        name: { type: String, default: "" },
+        picture: { type: String, default: "" },
+        email: { type: String, default: ""}
+    },
+
     hasPassword: { type: Boolean, default: true },
-    mergedWithFB: { type: Boolean, default: true },
+    mergedWithFB: { type: Boolean, default: false },
+    mergedWithGoogle: {type: Boolean, default: false},
 
     tournamentsPlayed: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],
     tournamentsPlaying: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],

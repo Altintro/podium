@@ -14,6 +14,8 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "fs": "0.0.1-security",
+    "express-promise-router": "^3.0.1",
+    "google-auth-library": "^1.3.2",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.9",
