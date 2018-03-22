@@ -1,6 +1,7 @@
 "use_strict"
 
 const mongoose = require('mongoose')
+
 var Schema = mongoose.Schema
 
 const userSchema = Schema({
