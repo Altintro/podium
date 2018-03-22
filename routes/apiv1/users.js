@@ -1,14 +1,15 @@
 'use_strict'
 
 var express = require('express');
-var router = express.Router();
+var router = require('express-promise-router')()
 var userController = require('../../controllers/userController')
 var userAccountController = require('../../controllers/userAccountController')
-var authController = require('../../controllers/authController')
+var authController = require('../../controllers/authController') 
 
 // Auth
 router.post('/register', userAccountController.register)
 router.post('/login',userAccountController.login )
+router.post('/google', userAccountController.google)
 
 // Others
 
@@ -16,9 +17,11 @@ router.post('/login',userAccountController.login )
 router.get('/', userController.getUsers)
 router.get('/:id', userController.getUser)
 
+
 // Token required
 router.use(authController.verifyToken);
-
 router.delete('/:id', userController.deleteUser)
+
+
 
 module.exports = router;

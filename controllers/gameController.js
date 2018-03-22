@@ -15,83 +15,60 @@ function mapBasicGame(game) {
     }
 }
 
-exports.getGames = (req, res, next) => {
-
+exports.getGames = async (req, res, next) => {
     const limit = parseInt(req.query.limit)
     const sort = req.query.sort
     const filter = {}
-
-    Game.find(filter)
-        .limit(limit)
-        .sort(sort)
-        .populate('sport')
-        .exec().then((games) => {
-            games = games.map(mapBasicGame)
-            return res.json({ result: games })
-        }).catch((err) => {
-            return next(err)
-        })
+    var games = await Game.find(filter)
+    .limit(limit)
+    .sort(sort)
+    .populate('sport')
+    .exec()
+    games = games.map(mapBasicGame)
+    return res.status(200).json({ result: games })
 }
 
-exports.getGame = (req, res, next) => {
+exports.getGame = async (req, res, next) => {
     let participants = req.query.participants ? 'participants' : ''
-    Game.findById(req.params.id).select('-pwd').populate(participants).exec().then((game) => {
-        return res.json({game})
-    }).catch((err) => {
-        return next(err)
-    })
+    const game = await Game.findById(req.params.id)
+    .select('-pwd')
+    .populate(participants)
+    .exec()
+    res.status(200).json({ result: game })
 }
 
-exports.postGame = (req, res, send) => {
-
-    Team.create({
-        players:[{ _id: req.userId }]
-    }).then((team) => {
-        return Game.create({
-            name: req.body.name,
-            participants: [team._id],
-        })
-    }).then((game) => {
-        var query = { _id: req.userId }
-        var operation = { $push: { gamesPlaying: game._id }}
-        return User.update(query,operation)
-    }).then((user) => {
-        res.json({success: 'Game created successfully'})
-    }).catch((err) => {
-        res.json({error: 'Error creating game',err})
+exports.postGame = async (req, res, send) => {
+    const team = await Team.create({  players:[{ _id: req.userId }] })
+    const game = await Game.create({ 
+        name: req.body.name,
+        participants: [team._id] 
     })
+    var query = { _id: req.userId }
+    var operation = { $push: { gamesPlaying: game._id }}
+    const user = await User.update(query, operation)
+    res.status(200).json({success: 'Game created successfully'})
 }
 
-exports.signUpGame = (req, res, send) => {
-    Team.create({
-        players: [{ _id: req.userId}]
-    }).then((team) => {
-        var query = { _id: req.params.id }
-        var operation = { $push: { participants: team._id }}
-        return Game.update(query,operation)
-    }).then((game) => {
-        var query = { _id: req.userId }
-        var operation = { $push: { gamesPlaying: req.params.id }}
-        return User.update(query,operation)
-    }).then(() => {
-        return res.json({success: 'User signed-up to game'})
-    }).catch((err) => {
-        return res.json({error: 'Error signing-up to game', err})
-    })
-}
-
-exports.deleteGame =  (req,res,next) => {
- 
+exports.signUpGame = async (req, res, send) => {
+    // TODO: Check for user already in a team
+    const team = await Team.create({ players: [{ _id: req.userId}] })
     var query = { _id: req.params.id }
-    Game.findOneAndRemove(query).then((game) => {
-        var teamQuery = {$or:[]}
-        game.participants.map((teamId) => {
-            teamQuery.$or.push({_id: teamId})
-        })
-        return Team.deleteMany(teamQuery)
-    }).then(() => {
-        return res.json({deleted: true})
-    }).catch((err) => {
-        return next(err)
+    var operation = { $push: { participants: team._id }}
+    const game = await Game.update(query,operation)
+    var query = { _id: req.userId }
+    var operation = { $push: { gamesPlaying: req.params.id }}
+    const user = await User.update(query,operation)
+    return res.status(200).json({success: 'User signed-up to game'})
+
+}
+
+exports.deleteGame = async (req,res,next) => {
+    var query = { _id: req.params.id }
+    const game =  Game.findOneAndRemove(query)
+    var teamQuery = {$or:[]}
+    game.participants.map((teamId) => {
+        teamQuery.$or.push({_id: teamId})
     })
+    await Team.deleteMany(teamQuery)
+    return res.status(200).json({ deleted: true })
 }
