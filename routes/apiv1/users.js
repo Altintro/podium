@@ -10,13 +10,14 @@ var authController = require('../../controllers/authController')
 router.post('/register', userAccountController.register)
 router.post('/login',userAccountController.login )
 router.post('/google', userAccountController.google)
+router.post('/checkEmail', userAccountController.checkEmail)
+router.post('/checkAlias', userAccountController.checkAlias)
 
 // Others
 
 // No token required
 router.get('/', userController.getUsers)
 router.get('/:id', userController.getUser)
-
 
 // Token required
 router.use(authController.verifyToken);

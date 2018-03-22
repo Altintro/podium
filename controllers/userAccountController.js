@@ -48,6 +48,20 @@ exports.login = async (req, res, next) => {
     return res.status(200).json({auth: true, token: token})
 }
 
+exports.checkEmail = async (req, res, next) => {
+    var query = { email: req.query.email }
+    const user = await User.findOne(query)
+    if(!user) return res.status(404).json({ result: 'User does not exist with the requested email'})
+    return res.status(200).json({ result: 'Email belongs to existing user' })
+}
+
+exports.checkAlias = async (req, res, next) => {
+    var query = { alias: req.query.alias }
+    const user = await User.findOne(query)
+    if(!user) return res.status(404).json({ result: 'User does not exist with the requested alias' })
+    return res.status(200).json({result: 'Alias belongs to existing user'})
+}
+
 exports.google = async (req,res,next) => {
     var googleToken = req.query.googleToken || 'xxx'
     const info = await client.verifyIdToken({
@@ -82,4 +96,8 @@ exports.google = async (req,res,next) => {
         expiresIn: 86400})
         return res.json({auth: true, token: token})
     }
+}
+
+exports.facebook = async (req, res, next) => {
+    // Facebook Registration/Login
 }
