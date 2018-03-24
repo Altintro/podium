@@ -3,7 +3,7 @@
 var nodemailer = require('nodemailer')
 var config = require('../config')
 
-function sendMail (email, token) {
+exports.sendMagicLink =  (email, token) => {
     const mailOptions = {
         from: 'winatpodium@gmail.com', // sender address
         to: email, // list of receivers
@@ -34,5 +34,3 @@ function sendMail (email, token) {
     })
 
 }
-
-exports.sendMail = sendMail

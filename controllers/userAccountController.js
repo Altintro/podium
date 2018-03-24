@@ -40,6 +40,7 @@ exports.register = async (req, res, next) => {
 
 // Deprecate
 exports.login = async (req, res, next) => {
+    
     var query = { email : req.body.email }
     const user = await User.findOne(query)
     if (!user) return res.status(404).json({ error: 'User not found' })
@@ -75,15 +76,14 @@ exports.google = async (req,res,next) => {
     if(user) {
 
         if(!user.mergedWithGoogle) {
-            return res.status(403).json({ err: 'User must login with email' })
+            return res.status(403).json({ err: 'Use different sign-in' })
         } else {
             console.log('Google sign in!')
             var token = jwt.sign({id: user._id },
                 config.secret, {
-                expiresIn: 86400
-            })
+                expiresIn: 86400})
             return res.status(200).json({auth: true, token: token})
-        }
+        }  
  
     } else {
         console.log('Google Sign up!')
@@ -115,12 +115,12 @@ exports.email = async (req, res, next) => {
         if(!user.mergedWithGoogle && !user.mergedWithFB ) {
              // Magic link login
              var token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
-             mailSender.sendMail(email, token)
+             mailSender.sendMagicLink(email, token)
              return res.status(200).json({exists: true})
         } else {
             // Let user know, he must sign-in
             // using another method
-            return next(new Error('User exists, but has signed in before with other method (fb or google)'))
+            return next(new Error('Use differnet sign-in'))
         }
     } else {
         // User does not exist
