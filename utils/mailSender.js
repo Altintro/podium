@@ -3,7 +3,19 @@
 var nodemailer = require('nodemailer')
 var config = require('../config')
 
-function sendMail (mailOptions) {
+function sendMail (email, token) {
+    const mailOptions = {
+        from: 'winatpodium@gmail.com', // sender address
+        to: email, // list of receivers
+        subject: 'Sign in to Podium!', // Subject line
+        html: `
+            <h1>Magic Link 🏄🏽‍</h1>
+            <a href="${config.host}/apiv1/users/me?token=${token}">
+            Click here for magic!
+            </a>
+              `,
+        text: `Magic link: ${config.host}/apiv1/users/me?token=${token}`
+      }
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
