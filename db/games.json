@@ -1,0 +1,41 @@
+{
+    "games": [
+
+        {
+            "name": "Futbol para mayores de 40",
+            "date": "04/12/2018",
+            "concluded": false,
+            "sport": "Fútbol",
+            "longitude": 40.419477,
+            "latitude": -3.61849,
+            "description": "Campo Municipal de Fútbol de San Blas (Madrid)"
+        },
+        {
+            "name": "Finde de Tenis en Madrid",
+            "date": "04/15/2018",
+            "concluded": false,
+            "sport": "Tenis",
+            "longitude": 40.461023,
+            "latitude":  -3.627757,
+            "description": "Parque de Florencio Castillo (Madrid)"
+        },
+        {
+            "name": "Ajedrez para principiantes",
+            "date": "04/19/2018",
+            "concluded": false,
+            "sport": "Ajedrez",
+            "longitude": 40.414094,
+            "latitude": -3.682878,
+            "description": "Parque del Retiro (Madrid)"
+        },
+        {
+            "name": "Poker modalidad Holdem",
+            "date": "04/29/2018",
+            "concluded": false,
+            "sport": "Poker",
+            "longitude": 40.420126,
+            "latitude": -3.700682,
+            "description": "Casino Gran Vía (Madrid)"
+        }
+    ]
+}
