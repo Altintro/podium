@@ -40,7 +40,7 @@ exports.register = async (req, res, next) => {
 
 // Deprecate
 exports.login = async (req, res, next) => {
-    
+
     var query = { email : req.body.email }
     const user = await User.findOne(query)
     if (!user) return res.status(404).json({ error: 'User not found' })
@@ -142,5 +142,12 @@ exports.emailRegister = async (req, res, next) => {
         expiresIn: 86400 //expires in 24 hours
     })
     // Send magic link
-    return res.json({ auth: true, token: token })
+    mailSender.sendMagicLink(req.body.email, token)
+    return res.json({ success: true })
+}
+
+exports.me = async (req, res, next) => {
+    const user = await User.findById(req.userId)
+    if(user) return res.status(200).json(mapBasicUser(user))
+    return res.status(404).json({ success: false })
 }

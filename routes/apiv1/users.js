@@ -19,10 +19,11 @@ router.post('/checkAlias', userAccountController.checkAlias)
 
 // No token required
 router.get('/', userController.getUsers)
-router.get('/:id', userController.getUser)
+router.get('/detail/:id', userController.getUser)
 
 // Token required
 router.use(authRequired);
+router.get('/me', userAccountController.me)
 router.delete('/:id', userController.deleteUser)
 
 
