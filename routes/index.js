@@ -8,7 +8,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/apple-app-site-association', (req, res , send) => {
-  var aasa = fs.readFileSync(__dirname + '/../../apple-app-site-association')
+  var aasa = fs.readFileSync(__dirname + '/../apple-app-site-association')
   res.status(200).send(aasa)
 })
 
