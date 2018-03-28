@@ -10,7 +10,7 @@ exports.sendMagicLink =  (email, token) => {
       subject: 'Sign in to Podium!', // Subject line
       html: `
         <h1>Magic Link 🏄🏽‍</h1>
-        <a href="${config.host}/apiv1/users/me?token=${token}">
+        <a href="${config.host}/magiclink/${token}">
         Click here for magic!
         </a>
               `,

@@ -8,8 +8,8 @@ var authRequired = require('../../controllers/authController').authRequired
 
 router.post('/register', userAccountController.register)
 router.post('/login',userAccountController.login )
-router.post('/google', userAccountController.google)
-router.post('/email',userAccountController.email)
+router.post('/googleConnect', userAccountController.google)
+router.post('/emailConnect',userAccountController.email)
 router.post('/emailRegister',userAccountController.emailRegister)
 router.post('/checkEmail', userAccountController.checkEmail)
 router.post('/checkAlias', userAccountController.checkAlias)

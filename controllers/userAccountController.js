@@ -113,10 +113,10 @@ exports.email = async (req, res, next) => {
       // Magic link login
       const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
       mailSender.sendMagicLink(email, token)
-      return res.status(200).json({exists: true})
+      return res.status(200).json({ exists: true })
     } else {
       // Let user know, he must sign-in using another method
-      return next(new Error('Use differnet sign-in'))
+      return res.status().json({ exists: 'other'})
     }
   } else {
     // User does not exist, show register view in app: Full name and alias
