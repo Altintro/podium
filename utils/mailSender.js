@@ -19,6 +19,7 @@ exports.sendMagicLink =  (email, token) => {
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
+    host: 'smtp.gmail.com',
     auth: {
       user: config.email,
       pass: config.emailpass
