@@ -10,7 +10,6 @@ router.get('/',tournamentController.getTournaments)
 router.get('/:id', tournamentController.getTournament)
 
 router.use(authRequired)
-
 router.post('/', tournamentController.postTournament)
 router.post('/signup/:id', tournamentController.signUpTournament) 
 router.delete('/:id',tournamentController.deleteTournament)

@@ -11,7 +11,6 @@ router.get('/',gameController.getGames)
 router.get('/:id',gameController.getGame)
 
 router.use(authRequired)
-
 router.post('/',gameController.postGame)
 router.post('/signup/:id',gameController.signUpGame)
 router.delete('/:id',gameController.deleteGame)

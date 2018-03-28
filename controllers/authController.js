@@ -10,33 +10,32 @@ const client = new OAuth2Client(googleClientId);
 
 exports.authRequired = (req,res,next) => {
 
-    var token = req.headers['x-access-token']
-    if(!token) return res.json({ auth: false, message: 'No token provided'})
+  var token = req.headers['x-access-token']
+  if(!token) return res.json({ auth: false, message: 'No token provided'})
 
-    jwt.verify(token, config.secret, (err, decoded)=> {
-        if (err) return res.json({ auth: false, message: 'Failed to authenticate token' })
-        //If token is provided and correct, save to request for use in other routes
-        req.userId = decoded.id 
-        next()
-    })
+  jwt.verify(token, config.secret, (err, decoded)=> {
+    if (err) return res.json({ auth: false, message: 'Failed to authenticate token' })
+    //If token is provided and correct, save to request for use in other routes
+    req.userId = decoded.id 
+    next()
+  })
 }
 
 exports.verifyToken = (token) => {
-    jwt.verify(token, config.secret, (err, decoded)=> {
-        if (err) return false
-        return true
-    })
+  jwt.verify(token, config.secret, (err, decoded)=> {
+    if (err) return false
+    return true
+  })
 }
 
 exports.verifyGoogleToken = (googleToken) => {
 
-    return info = client.verifyIdToken({
-        idToken: googleToken,
-        audience: googleClientId})
+  return info = client.verifyIdToken({
+    idToken: googleToken,
+    audience: googleClientId})
 }
 
 exports.generateAlias = (name) => {
-
-    return name.replace(/\s+/g, '') + shortid.generate()
+  return name.replace(/\s+/g, '') + shortid.generate()
 }
 
