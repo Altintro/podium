@@ -10,6 +10,7 @@ exports.sendMagicLink =  (user, token) => {
     from: 'no-reply@winatpodium.com', // sender address
       to: user.email, // list of receivers
       subject: 'Sign in to Podium!', // Subject line
+      text: `${config.host}/magiclink/${token}`,
       html: `
         <h1>Magic Link</h1>
         <p>Hello ${user.name}, welcome to Podium.</p>
