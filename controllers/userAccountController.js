@@ -112,7 +112,7 @@ exports.email = async (req, res, next) => {
     if(!user.mergedWithGoogle && !user.mergedWithFB ) {
       // Magic link login
       const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
-      mailSender.sendMagicLink(email, token)
+      mailSender.sendMagicLink(user, token)
       return res.status(200).json({ exists: true })
     } else {
       // Let user know, he must sign-in using another method

@@ -1,29 +1,33 @@
 'use_strict'
 
 var nodemailer = require('nodemailer')
+var smtpTransport = require('nodemailer-smtp-transport')
 var config = require('../config')
 
-exports.sendMagicLink =  (email, token) => {
+exports.sendMagicLink =  (user, token) => {
+
   const mailOptions = {
-    from: 'winatpodium@gmail.com', // sender address
-      to: email, // list of receivers
+    from: 'no-reply@winatpodium.com', // sender address
+      to: user.email, // list of receivers
       subject: 'Sign in to Podium!', // Subject line
       html: `
-        <h1>Magic Link 🏄🏽‍</h1>
+        <h1>Magic Link</h1>
+        <p>Hello ${user.name}, welcome to Podium.</p>
+        <p>Click on the link below to sign in!</p>
         <a href="${config.host}/magiclink/${token}">
-        Click here for magic!
+        Magic link
         </a>
-              `,
-      text: `Magic link: ${config.host}/apiv1/users/me?token=${token}`
+              `
   }
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
+  const transporter = nodemailer.createTransport(smtpTransport({
+    secure: true,
+    service: 'SES',
     auth: {
-      user: config.email,
-      pass: config.emailpass
+      user: config.smtpUserName,
+      pass: config.smtpPass
     }
-  })
+  }))
 
   transporter.sendMail(mailOptions, (err, info) => {
     if(err){
