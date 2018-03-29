@@ -24,7 +24,7 @@ exports.sendMagicLink =  (user, token) => {
       <h1>Magic Link</h1>
       <p>Hello ${user.name}, welcome to Podium.</p>
       <p>Click on the link below to sign in!</p>
-      <a href="${config.host}/magiclink/${token}">
+      <a href="${config.host}/magiclink?token=${token}">
       Magic link
       </a>`
   }
