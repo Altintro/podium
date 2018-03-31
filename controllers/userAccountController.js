@@ -129,6 +129,6 @@ exports.emailRegister = async (req, res, next) => {
 
 exports.me = async (req, res, next) => {
   const user = await User.findById(req.userId)
-  if(user) return res.status(200).json(mapBasicUser(user))
+  if(user) return res.status(200).json(user)
   return res.status(404).json({ success: false })
 }
