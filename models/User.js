@@ -15,6 +15,7 @@ const userSchema = Schema({
     latitude: { type: Number, default: 0 },
     longitude: { type: Number, default: 0 },
     ranking: [{ sport: String, ranking: Number, points: Number }],
+    interests: [{ type: Schema.Types.ObjectId, ref: 'Sport' }],
 
     fb: {
         id: { type: String, default: "", index: true },

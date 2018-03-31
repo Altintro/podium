@@ -6,7 +6,6 @@ var userController = require('../../controllers/userController')
 var userAccountController = require('../../controllers/userAccountController')
 var authRequired = require('../../controllers/authController').authRequired 
 
-router.post('/register', userAccountController.register)
 router.post('/login',userAccountController.login )
 router.post('/googleConnect', userAccountController.google)
 router.post('/emailConnect',userAccountController.email)
