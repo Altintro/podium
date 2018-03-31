@@ -31,7 +31,7 @@ const userSchema = Schema({
         email: { type: String, default: ""}
     },
 
-    hasPassword: { type: Boolean, default: true },
+    hasPassword: { type: Boolean, default: false },
     mergedWithFB: { type: Boolean, default: false },
     mergedWithGoogle: {type: Boolean, default: false},
 
