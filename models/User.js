@@ -20,11 +20,7 @@ const userSchema = Schema({
     fb: {
         id: { type: String, default: "", index: true },
         name: { type: String, default: "" },
-        picture: {
-            data: {
-                url: { type: String, default: "" }
-            }
-        },
+        picture: { type: String, default: "" },
         email: { type: String, default: "" }
     },
 
