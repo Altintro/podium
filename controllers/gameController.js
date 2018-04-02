@@ -9,7 +9,7 @@ function mapBasicGame(game) {
     _id: game.id,
     name: game.name,
     sport: game.sport,
-    levelAverage: game.levelAverage,
+    //levelAverage: game.levelAverage,
     open: game.open,
     modality: game.modality
   }
@@ -49,7 +49,7 @@ exports.postGame = async (req, res, send) => {
   const query = { _id: req.userId }
   const operation = { $push: { gamesPlaying: game._id }}
   const user = await User.update(query, operation)
-  res.status(200).json({success: 'Game created successfully'})
+  res.status(200).json({success: true })
 }
 
 exports.signUpGame = async (req, res, send) => {
@@ -62,7 +62,7 @@ exports.signUpGame = async (req, res, send) => {
   query = { _id: req.userId }
   operation = { $push: { gamesPlaying: req.params.id }}
   const user = await User.update(query,operation)
-  return res.status(200).json({success: 'User signed-up to game'})
+  return res.status(200).json({ success: true })
 
 }
 
