@@ -39,7 +39,6 @@ exports.getTournament = async (req, res, next) => {
 
   let participants = req.query.participants ? 'participants' : ''
   const tournament = await Tournament.findById(req.params.id)
-  .select('-pwd')
   .populate(participants)
   .exec()
   return res.status(200).json({ result: tournament })

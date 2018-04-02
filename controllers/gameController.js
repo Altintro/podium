@@ -33,18 +33,18 @@ exports.getGame = async (req, res, next) => {
 
   let participants = req.query.participants ? 'participants' : ''
   const game = await Game.findById(req.params.id)
-  .select('-pwd')
   .populate(participants)
   .exec()
   res.status(200).json({ result: game })
 }
 
 exports.postGame = async (req, res, send) => {
-
   const team = await Team.create({  players:[{ _id: req.userId }] })
+  const sport = await Sport.findOne({ name: req.body.sport })
   const game = await Game.create({ 
     name: req.body.name,
-    participants: [team._id] 
+    participants: [team._id] ,
+    sport: sport._id
   })
   const query = { _id: req.userId }
   const operation = { $push: { gamesPlaying: game._id }}
