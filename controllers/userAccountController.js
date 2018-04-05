@@ -1,11 +1,12 @@
 'use_strict'
 
-var jwt = require('jsonwebtoken')
-var config = require('../config')
-var bcrypt = require('bcryptjs')
-var mailSender = require('./../utils/mailSender')
+const jwt = require('jsonwebtoken')
+const config = require('../config')
+const bcrypt = require('bcryptjs')
+const mailSender = require('./../utils/mailSender')
+const slug = require('slug')
 
-var auth = require('./authController')
+const auth = require('./authController')
 const User = require('../models/User')
 
 function mapBasicUser(user) {
@@ -22,7 +23,6 @@ exports.mapBasicUser = mapBasicUser
 
 // Deprecate
 exports.login = async (req, res, next) => {
-
   const query = { email : req.body.email }
   const user = await User.findOne(query)
   if (!user) return res.status(404).json({ error: 'User not found' })
@@ -61,7 +61,6 @@ exports.google = async (req,res,next) => {
     if(!user.mergedWithGoogle) {
       return res.status(405).json({ err: 'Use different sign-in' })
     } else {
-      console.log('Google sign in!')
       const token = jwt.sign({id: user._id },
         config.secret, {
         expiresIn: 86400})
@@ -69,7 +68,6 @@ exports.google = async (req,res,next) => {
     }  
 
   } else {
-    console.log('Google Sign up!')
     const alias = auth.generateAlias(payload.name)
     user = await User.create({
       google: payload,
@@ -77,7 +75,8 @@ exports.google = async (req,res,next) => {
       mergedWithGoogle: true,
       email: payload.email,
       name: payload.name,
-      alias: alias
+      alias: alias,
+      slug: slug(alias)
     })
     const token = jwt.sign({id: user._id },
       config.secret, {
@@ -93,7 +92,6 @@ exports.facebook = async (req, res, next) => {
 exports.email = async (req, res, next) => {
   const email = req.query.email
   const user = await User.findOne({ email : email })
-
   if(user){
     if(!user.mergedWithGoogle && !user.mergedWithFB ) {
       // Magic link login
@@ -101,28 +99,29 @@ exports.email = async (req, res, next) => {
       mailSender.sendMagicLink(user, token)
       return res.status(200).json({ exists: true })
     } else {
-      // Let user know, he must sign-in using another method
+      // Use other sign in method
       return res.status(405).json({ exists: 'other'})
     }
   } else {
-    // User does not exist, show register view in app: Full name and alias
+    // Go to Registration
     return res.status(202).json({ exists: false })
   }
 }
 
 exports.emailRegister = async (req, res, next) => {
   // var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
+  const alias = String(req.body.alias).toLowerCase()
   const user = await User.create({
     name: req.body.name,
-    alias: req.body.alias,
+    alias: alias,
     email: req.body.email,
+    slug: slug(alias)
     //pass: hashedPassword
   })
   const token = jwt.sign({id: user._id },
     config.secret, {
     expiresIn: 86400 //expires in 24 hours
   })
-  // Send magic link
   mailSender.sendMagicLink(user, token)
   return res.json({ auth: true, token: 'magiclink' })
 }

@@ -7,7 +7,8 @@ var Schema = mongoose.Schema
 const userSchema = Schema({
     name: { type: String, default : "" },
     alias: { type: String, default: "", index: { unique: true, dropDups: true } },
-    pass: { type:String, default: "" },
+    slug: { type: String, index: { unique: true, dropDups: true }},
+    pass: { type: String, default: "" },
     email: { type: String, default: "", index: { unique: true, sparse: true, dropDups: true}},
     profilePic: { type: String, default: "" },
     gender: { type: String, default: "" },

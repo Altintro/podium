@@ -36,6 +36,7 @@ exports.verifyGoogleToken = (googleToken) => {
 }
 
 exports.generateAlias = (name) => {
-  return name.replace(/\s+/g, '') + shortid.generate()
+  let alias = name.replace(/\s+/g, '') + shortid.generate()
+  return alias.toLowerCase()
 }
 
