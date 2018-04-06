@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
 }))
 
 exports.sendMagicLink =  (user, token) => {
-
+  // TODO : protect token in url
   const mailOptions = {
     from: 'no-reply@winatpodium.com', 
     to: user.email, // list of receivers

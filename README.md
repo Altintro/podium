@@ -15,10 +15,14 @@
 	'use_strict'
 	
 	module.exports {
+		'host':'base_url'
 		'secret': 'appsecret',
 		'db': 'dbname',
 		'dbuser': 'dbuser',
 		'dbpass': 'dbpassword'
+		'google_client_id': 'google_client_id',
+		'smtpUserName': 'SESUSERNAME',
+		'smtpPass': 'SESPASSWORD'
 	}
 	```
 	
@@ -42,29 +46,72 @@
 
 This server needs authentication for most of requests , in order to make requests you will need to be register as an *User* and have an **access token**.
 
-**IMPORTANT**: The response for the register/login requests will be an *access token* that should be use in 	**every request as a header** (x-access-token) in order to get a response from the server. Copy the token and save it for further requests.
-	
-* **Registration**: do a *post* request to */apiv1/users/register*, the post must have a body with the registration fields: name, alias, email, password:
-	
-		{ 
-		name:  'name'
-		alias: 'alias,
-		pass:  'password',
-		email: 'useremail'
-		}
-		
-		
-* **Login**: If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/users/login. the post must have a body with the login fields: email, password:
-	
-		{
-		email: 'email',
-		pass: 'password'
-		}
+**IMPORTANT**: The response for a successfull register/login request will be an *access token* that should be use to authenticate in	**most of the requests as a header** (x-access-token) in order to get a response from the server. Copy the token and save it for further requests.
 
-	The response for the request will be an *access token* that should be use in **every request as a header** (x-access-token) in order to get a response from the server.
-	
-* **Google Register/Login:** do a post request to */apiv1/users/google?googleToken=google_idToken*. Google idToken will be extracted from athentication object when accesing the google login feature through the app.
+### Email 
+---
 
+* **Email Connect**: Post request to */apiv1/users/emailConnect?email='userEmail'*. Verifies weather an account exists for the email or not. if it does and the account is not merged with facebook/google, it returns :
+
+	```
+	{ auth: true } // status 200, send a magic link!
+	```
+If it does but the account is merged with google/facebook, it returns :
+
+	```
+	{ auth: 'other' } // status 405 , lead user to other sign-up methods (google/faceobok)
+	```
+If it doesn't exist, it returns :
+
+	```
+	{ auth: false } // status 202 , lead user to registration fields (name and alias)
+	```
+
+* **Email Register**: Post request to */apiv1/users/emailRegister*: Registers user with the information from the body of the request:
+
+	```
+	{
+	name: name,
+	alias: alias,
+	email: email
+	}
+	```
+Sends magic link to the user, if the magic link has been sent successfully, the request returns:
+
+	```
+	{ auth: true }
+	```
+
+### Google
+---
+* **Google Connect**: Post request to */apiv1/users/googleConnect?googleToken='user_token_google'*. If user exists and is merged with google, it returns:
+	
+	```
+	{ auth: true, token: token } // status 200, user sign-in successfully
+	```
+If user exists but is not merged with google:
+
+	```
+	{ auth: 'other' } // status 405
+	```
+If user does not exist:
+
+	```
+	{ auth : true, token: token } // status 201 , user signed-up successfully
+	```
+	
+### Facebobok // TODO
+---
+### Login Gateway // Testing only, will be deprecated
+---
+
+If your token expires after having registered, you may login into the server. Do a *post* request to /apiv1/users/login with the next body: 
+
+```
+{ email: 'email'}
+```
+
+The response for the request will be an *access token* that should be use in **requests that require authentication as a header** (x-access-token) in order to get a response from the server.
 	
 
 ## Usage
@@ -72,32 +119,33 @@ This server needs authentication for most of requests , in order to make request
 Once you've registered and have an *access-token* you will be able to get responses with documents from the DataBase, by adding a header with key as **x-access-token** and value as your token.
 
 ### Games
+---
 
-* **Get Games**:
-
-	 In order to recieve the games in the database make a *get* request to */apiv1/games*. Also, games can be filtered in the query of the request:
+* **Get Games**: In order to recieve the games in the database make a *get* request to */apiv1/games*. Also, games can be filtered in the query of the request:
 
 	* By name:  */apiv1/games?name='some_name'* 
 	* Set a limit: */apiv1/games?limit=2*
 	* Sort the ads by property: */apiv1/games?sort=sport*
 
-* **Get Game Detail**: Get request to */apiv1/games/gameObjectId?participants=true* 
+* **Get Game Detail**: Get request to */apiv1/games/detail/gameObjectId?participants=true* 
 
 	(Adding participants=true or participants = false to the query, populates the 	property *participants* of the game being recieved or not, with the Team 	objects participanting on the game )
 
-* **Post Game**: Post request to */apiv1/games*. The post must have a body with the next format:
+* **Post Game**: (auth required) Post request to */apiv1/games*. The post must have a body with the next format:
 	
 	```
 	{
-	name: 'gameName'
+	name: 'name_of_game'
+	sport: 'sport_of_game'
 	}
 	```
 	
-* **Subscribe to Game**: Post request to */apiv1/games/signup/gameObjectid*.
+* **Subscribe to Game**: (auth required) Post request to */apiv1/games/signup/gameObjectid*.
 
-* **Delete Game** : Delete request to */apiv1/games/gameObjectid*
+* **Delete Game** : (auth required) Delete request to */apiv1/games/gameObjectid*
 
 ### Tournaments:
+---
 
 * **Get Tournaments**:
 
@@ -128,6 +176,8 @@ Once you've registered and have an *access-token* you will be able to get respon
 * **Delete Tournament** : Delete request to /apiv1/tournaments/tournamentObjectid
 		
 ### Users:
+---
+
 * **Get Users**:
 
  	In order to recieve the users registered in the database make a *get* request to */	apiv1/users*. Also, ads can be filtered in the query of the request:
@@ -139,8 +189,8 @@ Once you've registered and have an *access-token* you will be able to get respon
  	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=alias*
  	* Sort the ads by property: */apiv1/users?sort=name*
  	
-* **Get User Detail**: Get request to */apiv1/users/userObjectId?games=true* 
+* **Get User Detail**: Get request to */apiv1/users/detail/userObjectId?games=true* 
 
 	(Adding games=true or games=false to the query, populates the 	property *gamesPlaying* of the game being recieved or not, with the Game 	objects that the user is participating in)
 
-* **Delete User**: Delete request to /apiv1/users/userObjectid
+* **Delete User**: (auth required) Delete request to /apiv1/users/userObjectid

@@ -59,7 +59,7 @@ exports.google = async (req,res,next) => {
   if(user) {
 
     if(!user.mergedWithGoogle) {
-      return res.status(405).json({ err: 'Use different sign-in' })
+      return res.status(405).json({ auth: 'other' })
     } else {
       const token = jwt.sign({id: user._id },
         config.secret, {
@@ -78,15 +78,11 @@ exports.google = async (req,res,next) => {
       alias: alias,
       slug: slug(alias)
     })
-    const token = jwt.sign({id: user._id },
+    const token = jwt.sign({ id: user._id },
       config.secret, {
       expiresIn: 86400})
     return res.status(201).json({auth: true, token: token})
   }
-}
-
-exports.facebook = async (req, res, next) => {
-    // Facebook Registration/Login
 }
 
 exports.email = async (req, res, next) => {
@@ -97,14 +93,14 @@ exports.email = async (req, res, next) => {
       // Magic link login
       const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
       mailSender.sendMagicLink(user, token)
-      return res.status(200).json({ exists: true })
+      return res.status(200).json({ auth : true })
     } else {
       // Use other sign in method
-      return res.status(405).json({ exists: 'other'})
+      return res.status(405).json({ auth: 'other'})
     }
   } else {
     // Go to Registration
-    return res.status(202).json({ exists: false })
+    return res.status(202).json({ auth: false })
   }
 }
 
@@ -123,7 +119,7 @@ exports.emailRegister = async (req, res, next) => {
     expiresIn: 86400 //expires in 24 hours
   })
   mailSender.sendMagicLink(user, token)
-  return res.json({ auth: true, token: 'magiclink' })
+  return res.json({ auth: true })
 }
 
 exports.me = async (req, res, next) => {
