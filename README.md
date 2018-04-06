@@ -56,15 +56,15 @@ This server needs authentication for most of requests , in order to make request
 	```
 	{ auth: true } // status 200, send a magic link!
 	```
-If it does but the account is merged with google/facebook, it returns :
+	If it does but the account is merged with google/facebook, it returns :
 
 	```
-	{ auth: 'other' } // status 405 , lead user to other sign-up methods (google/faceobok)
+	{ auth: 'other' } // status 405 , lead user to other sign-up methods 	(google/faceobok)
 	```
-If it doesn't exist, it returns :
+	If it doesn't exist, it returns :
 
 	```
-	{ auth: false } // status 202 , lead user to registration fields (name and alias)
+	{ auth: false } // status 202 , lead user to registration fields (name 	and alias)
 	```
 
 * **Email Register**: Post request to */apiv1/users/emailRegister*: Registers user with the information from the body of the request:
@@ -76,7 +76,7 @@ If it doesn't exist, it returns :
 	email: email
 	}
 	```
-Sends magic link to the user, if the magic link has been sent successfully, the request returns:
+	Sends magic link to the user, if the magic link has been sent 	successfully, the request returns:
 
 	```
 	{ auth: true }
@@ -89,12 +89,14 @@ Sends magic link to the user, if the magic link has been sent successfully, the 
 	```
 	{ auth: true, token: token } // status 200, user sign-in successfully
 	```
-If user exists but is not merged with google:
+	
+	If user exists but is not merged with google:
 
 	```
 	{ auth: 'other' } // status 405
 	```
-If user does not exist:
+	
+	If user does not exist:
 
 	```
 	{ auth : true, token: token } // status 201 , user signed-up successfully
