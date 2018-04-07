@@ -85,8 +85,8 @@ exports.google = async (req,res,next) => {
   }
 }
 
-exports.email = async (req, res, next) => {
-  const email = req.query.email
+exports.email = async (req, res, next) => { 
+  const email = req.query.email.trim()
   const user = await User.findOne({ email : email })
   if(user){
     if(!user.mergedWithGoogle && !user.mergedWithFB ) {
@@ -106,12 +106,11 @@ exports.email = async (req, res, next) => {
 
 exports.emailRegister = async (req, res, next) => {
   // var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
-  const alias = String(req.body.alias).toLowerCase()
   const user = await User.create({
     name: req.body.name,
-    alias: alias,
-    email: req.body.email,
-    slug: slug(alias)
+    alias: req.body.alias.toLowerCase().trim(),
+    email: req.body.email.trim(),
+    slug: slug(req.body.alias.toLowerCase())
     //pass: hashedPassword
   })
   const token = jwt.sign({id: user._id },

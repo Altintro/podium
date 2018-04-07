@@ -4,8 +4,12 @@ var express = require('express')
 var router = require('express-promise-router')()
 var sportsController = require('../../controllers/sportsController')
 var authRequired = require('../../controllers/authController').authRequired
+var multer = require('multer')
+var upload = multer({dest: '../files/sports/uploads/'})
+
 
 router.get('/',sportsController.getSports)
 router.post('/',sportsController.postSport)
+router.post('/upload/:id',upload.single('image'), sportsController.uploadSportImage)
 
 module.exports = router
