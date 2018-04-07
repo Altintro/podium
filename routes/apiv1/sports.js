@@ -5,7 +5,7 @@ var router = require('express-promise-router')()
 var sportsController = require('../../controllers/sportsController')
 var authRequired = require('../../controllers/authController').authRequired
 var multer = require('multer')
-var upload = multer({dest: '../files/sports/uploads/'})
+var upload = multer({dest: '../../public/files/sports/uploads/'})
 
 
 router.get('/',sportsController.getSports)
