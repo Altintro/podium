@@ -3,30 +3,37 @@
         
         {
             "name": "Tenis",
+            "slug": "tenis",
             "description": "Tenis"
         },
         {
             "name": "Baloncesto",
+            "slug": "baloncesto",
             "description": "Baloncesto"
         },
         {
             "name": "Voleibol",
+            "slug": "voleibol",
             "description": "Voleibol"
         },
         {
             "name": "Padel",
+            "slug": "padel",
             "description": "Padel"
         },
         {
             "name": "Fútbol",
+            "slug": "futbol",
             "description": "Fútbol"
         },
         {
             "name": "Ajedrez",
+            "slug": "ajedrez",
             "description": "Ajedrez"
         },
         {
             "name": "Poker",
+            "slug": "poker",
             "description": "Poker"
         }
     ]

@@ -1,7 +1,7 @@
 'use_strict'
 
 var express = require('express');
-var router = require('express-promise-router')();
+var router = require('express-promise-router');
 var userController = require('../../controllers/userController')
 var userAccountController = require('../../controllers/userAccountController')
 var authRequired = require('../../controllers/authController').authRequired 
