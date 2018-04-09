@@ -7,7 +7,8 @@ var Schema = mongoose.Schema
 const userSchema = Schema({
     name: { type: String, default : "" },
     alias: { type: String, default: "", index: { unique: true, dropDups: true } },
-    pass: { type:String, default: "" },
+    slug: { type: String, index: { unique: true, dropDups: true }},
+    pass: { type: String, default: "" },
     email: { type: String, default: "", index: { unique: true, sparse: true, dropDups: true}},
     profilePic: { type: String, default: "" },
     gender: { type: String, default: "" },
@@ -15,15 +16,12 @@ const userSchema = Schema({
     latitude: { type: Number, default: 0 },
     longitude: { type: Number, default: 0 },
     ranking: [{ sport: String, ranking: Number, points: Number }],
+    interests: [{ type: Schema.Types.ObjectId, ref: 'Sport' }],
 
     fb: {
         id: { type: String, default: "", index: true },
         name: { type: String, default: "" },
-        picture: {
-            data: {
-                url: { type: String, default: "" }
-            }
-        },
+        picture: { type: String, default: "" },
         email: { type: String, default: "" }
     },
 
@@ -34,7 +32,7 @@ const userSchema = Schema({
         email: { type: String, default: ""}
     },
 
-    hasPassword: { type: Boolean, default: true },
+    hasPassword: { type: Boolean, default: false },
     mergedWithFB: { type: Boolean, default: false },
     mergedWithGoogle: {type: Boolean, default: false},
 

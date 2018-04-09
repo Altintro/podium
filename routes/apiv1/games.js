@@ -3,15 +3,14 @@
 var express = require('express')
 var router = require('express-promise-router')()
 var gameController = require('../../controllers/gameController')
-var authController = require('../../controllers/authController')
+var authRequired = require('../../controllers/authController').authRequired
 
 
 
 router.get('/',gameController.getGames)
 router.get('/:id',gameController.getGame)
 
-router.use(authController.verifyToken)
-
+router.use(authRequired)
 router.post('/',gameController.postGame)
 router.post('/signup/:id',gameController.signUpGame)
 router.delete('/:id',gameController.deleteGame)
