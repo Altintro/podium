@@ -51,16 +51,12 @@ This server needs authentication for most of requests , in order to make request
 ### Email 
 ---
 
-* **Email Connect**: Post request to */apiv1/users/emailConnect?email='userEmail'*. Verifies weather an account exists for the email or not. if it does and the account is not merged with facebook/google, it returns :
+* **Email Connect**: Post request to */apiv1/users/emailConnect?email='userEmail'*. Verifies weather an account exists for the email or not. if it does it returns: (notice if the account had logged in before with another method(google or facebobok) it will login anyway via email.)
 
 	```
 	{ auth: true } // status 200, send a magic link!
 	```
-	If it does but the account is merged with google/facebook, it returns :
-
-	```
-	{ auth: 'other' } // status 405 , lead user to other sign-up methods 	(google/faceobok)
-	```
+	
 	If it doesn't exist, it returns :
 
 	```
@@ -84,16 +80,10 @@ This server needs authentication for most of requests , in order to make request
 
 ### Google
 ---
-* **Google Connect**: Post request to */apiv1/users/googleConnect?googleToken='user_token_google'*. If user exists and is merged with google, it returns:
+* **Google Connect**: Post request to */apiv1/users/googleConnect?googleToken='user_token_google'*. If user exists and is merged with google, it logs in, if its not merge with google it merges the user with google and logs in anyway. both return:
 	
 	```
 	{ auth: true, token: token } // status 200, user sign-in successfully
-	```
-	
-	If user exists but is not merged with google:
-
-	```
-	{ auth: 'other' } // status 405
 	```
 	
 	If user does not exist:
