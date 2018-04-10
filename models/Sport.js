@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const sportSchema = Schema({
-    name: {type : String, default : ""},
+    name: {type : String, default : "" ,  index: { unique: true, dropDups: true }},
     slug: {type: String, index: { unique: true, dropDups: true }},
     image: { type: String, default: "" } ,
     description: { type: String, default: ""},
