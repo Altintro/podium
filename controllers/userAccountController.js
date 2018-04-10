@@ -51,57 +51,41 @@ exports.checkAlias = async (req, res, next) => {
 }
 
 exports.google = async (req,res,next) => {
-
+  let status
   const info = await auth.verifyGoogleToken(req.query.googleToken)
   const payload = info.payload
   let user = await User.findOne({ email: payload.email })
-
-  if(user) {
-
-    if(!user.mergedWithGoogle) {
-      return res.status(405).json({ auth: 'other' })
-    } else {
-      const token = jwt.sign({id: user._id },
-        config.secret, {
-        expiresIn: 86400})
-      return res.status(200).json({ auth: true, token: token })
-    }  
-
+  
+  if(user && !user.mergedWithGoogle) {
+    status = 200
+    user.google = payload
+    user.mergedWithGoogle = true
+    await user.save()
   } else {
+    status = 201
     const alias = auth.generateAlias(payload.name)
     user = await User.create({
       google: payload,
       hasPassword: false,
       mergedWithGoogle: true,
-      email: payload.email,
       name: payload.name,
       alias: alias,
+      email: payload.email,
       slug: slug(alias)
     })
-    const token = jwt.sign({ id: user._id },
-      config.secret, {
-      expiresIn: 86400})
-    return res.status(201).json({auth: true, token: token})
   }
+  const token = jwt.sign({id: user._id }, config.secret, { expiresIn: 86400 })
+  return res.status(status).json({ auth: true, token: token }) 
 }
 
 exports.email = async (req, res, next) => { 
   const email = req.query.email.trim()
   const user = await User.findOne({ email : email })
-  if(user){
-    if(!user.mergedWithGoogle && !user.mergedWithFB ) {
-      // Magic link login
-      const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
-      mailSender.sendMagicLink(user, token)
-      return res.status(200).json({ auth : true })
-    } else {
-      // Use other sign in method
-      return res.status(405).json({ auth: 'other'})
-    }
-  } else {
-    // Go to Registration
-    return res.status(202).json({ auth: false })
-  }
+  if(!user) return res.status(202).json({ auth: false })
+
+  const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
+  mailSender.sendMagicLink(user, token)
+  return res.status(200).json({ auth : true })
 }
 
 exports.emailRegister = async (req, res, next) => {
@@ -113,10 +97,7 @@ exports.emailRegister = async (req, res, next) => {
     slug: slug(req.body.alias.toLowerCase())
     //pass: hashedPassword
   })
-  const token = jwt.sign({id: user._id },
-    config.secret, {
-    expiresIn: 86400 //expires in 24 hours
-  })
+  const token = jwt.sign({id: user._id }, config.secret, { expiresIn: 86400 })
   mailSender.sendMagicLink(user, token)
   return res.json({ auth: true })
 }
