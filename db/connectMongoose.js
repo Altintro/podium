@@ -16,6 +16,6 @@ conn.once('open', () => {
 })
 
 
-let uri = 'mongodb://' + config.dbuser + ':' + config.dbpass + '@localhost/' + config.db
-//let uri = 'mongodb://localhost/' + config.db // Test in local db
+//let uri = 'mongodb://' + config.dbuser + ':' + config.dbpass + '@localhost/' + config.db
+let uri = 'mongodb://localhost/' + config.db // Test in local db
 mongoose.connect(uri)

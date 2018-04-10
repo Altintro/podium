@@ -1,0 +1,40 @@
+{
+    "users": [
+
+        {
+            "name": "Fernando Frances Monasterio",
+            "alias": "fernando",
+            "slug": "fernandox",
+            "pass": "fernando123",
+            "email": "fernando95frances@gmail.com"
+        },
+        {
+            "name": "Marta Roldán",
+            "alias": "marta",
+            "slug": "martax",
+            "pass": "marta123",
+            "email": "mrmartaroldan@gmail.com"
+        },
+        {
+            "name": "Tomás Ignacio Moyano",
+            "alias": "tomasi",
+            "slug": "tomasix",
+            "pass": "tomas123",
+            "email": "moyanotomasi@gmail.com"
+        },
+        {
+            "name": "Alejandro Cabral Benavente",
+            "alias": "acrux",
+            "slug": "acruxx",
+            "pass": "alejandro123",
+            "email": "cabralejandro@gmail.com"
+        },
+        {
+            "name": "Podium App Tester",
+            "alias": "podium",
+            "slug": "podiumx",
+            "pass": "12345678",
+            "email": "podiumtest2018@gmail.com"
+        }
+    ]
+}

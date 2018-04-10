@@ -1,0 +1,40 @@
+{
+    "sports": [
+        
+        {
+            "name": "Fútbol",
+            "slug": "futbol",
+            "description": "Fútbol"
+        },
+        {
+            "name": "Tenis",
+            "slug": "tenis",
+            "description": "Tenis"
+        },
+        {
+            "name": "Ajedrez",
+            "slug": "ajedrez",
+            "description": "Ajedrez"
+        },
+        {
+            "name": "Poker",
+            "slug": "poker",
+            "description": "Poker"
+        },
+        {
+            "name": "Baloncesto",
+            "slug": "baloncesto",
+            "description": "Baloncesto"
+        },
+        {
+            "name": "Voleibol",
+            "slug": "voleibol",
+            "description": "Voleibol"
+        },
+        {
+            "name": "Padel",
+            "slug": "padel",
+            "description": "Padel"
+        }
+    ]
+}
