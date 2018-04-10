@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 //Stablish connection to database
-require('./db/connectDb');
+require('./db/connectMongoose');
 var app = express();
 
 // view engine setup
