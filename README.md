@@ -77,6 +77,7 @@ This server needs authentication for most of requests , in order to make request
 	```
 	{ auth: true }
 	```
+* **Me**: (auth required) Post request to */apiv1/users/me*: Sends the user information for the token provided in the header of the request.
 
 ### Google
 ---
