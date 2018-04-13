@@ -48,7 +48,7 @@ This server needs authentication for most of requests , in order to make request
 
 **IMPORTANT**: The response for a successfull register/login request will be an *access token* and *refresh token*. Access-token  should be use to authenticate in	**most of the requests as a header** (x-access-token) in order to get a response from the server. Copy the token and save it for further requests. If access-token expires, use refresh-token in order to get a new one.
 
-* **Refresh Token**: Post request to */apiv1/users/refreshToken/'refresh-token'*: When access-token expires for user, he will have to call the refresh token request , with the refresh token as route parameter in orther to get a new access-token. If refresh-token is revoked or does not exist, it returns:
+* **Refresh Token**: Post request to */apiv1/users/refreshToken* with the **Refresh Token as Header (x-refresh-token) of the request**: When access-token expires for user, he will have to call the refresh token request , with the refresh token as route parameter in orther to get a new access-token. If refresh-token is revoked or does not exist, it returns:
 	
 	```
 	{ auth: false } // User must sign in again

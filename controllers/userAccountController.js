@@ -77,7 +77,7 @@ exports.google = async (req,res,next) => {
   }
   const accessToken = auth.generateAccessToken(user._id)
   const refreshToken = auth.generateRefreshToken(user._id)
-  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken }) 
+  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken.token }) 
 }
 
 exports.email = async (req, res, next) => { 
@@ -115,7 +115,8 @@ exports.tokens = async (req, res, next) => {
 }
 
 exports.refreshToken = async (req, res, next) => {
-  const query = { token : req.params.refreshToken }
+  const refresh = req.headers['x-refresh-token']
+  const query = { token : refresh }
   const refreshToken = await RefreshToken.findOne(query)
   if(!refreshToken) return res.status(401).json({ auth: false })
   const accessToken = auth.generateAccessToken()
