@@ -35,6 +35,7 @@ exports.postSport = async (req,res,next) => {
 }
 
 exports.uploadSportImage = async (req, res, next) => {
+  console.log(req.file)
   const sport = await Sport.findById(req.params.id)
   let uploadsPath = __dirname + '/../../public/images/sports/uploads/'
   let imagePath = __dirname + '/../../public/images/sports/' + sport.slug

@@ -15,17 +15,22 @@ exports.authRequired = (req,res,next) => {
 
   jwt.verify(token, config.secret, (err, decoded)=> {
     if (err) return res.json({ auth: false, message: 'Failed to authenticate token' })
-    //If token is provided and correct, save to request for use in other routes
     req.userId = decoded.id 
     next()
   })
 }
 
-exports.verifyToken = (token) => {
-  jwt.verify(token, config.secret, (err, decoded)=> {
-    if (err) return false
-    return true
-  })
+exports.generateAccessToken = (userId) => {
+  return jwt.sign({ id: userId }, config.secret, { expiresIn: 86400 })
+}
+
+exports.generateRefreshToken = (userId) => {
+  return Date.now.toString + shortid.generate + userId
+}
+
+exports.generateAlias = (name) => {
+  let alias = name.replace(/\s+/g, '') + shortid.generate()
+  return alias.toLowerCase()
 }
 
 exports.verifyGoogleToken = (googleToken) => {
@@ -35,8 +40,5 @@ exports.verifyGoogleToken = (googleToken) => {
     audience: googleClientId})
 }
 
-exports.generateAlias = (name) => {
-  let alias = name.replace(/\s+/g, '') + shortid.generate()
-  return alias.toLowerCase()
-}
+
 

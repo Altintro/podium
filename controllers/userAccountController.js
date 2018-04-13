@@ -1,6 +1,5 @@
 'use_strict'
 
-const jwt = require('jsonwebtoken')
 const config = require('../config')
 const bcrypt = require('bcryptjs')
 const mailSender = require('./../utils/mailSender')
@@ -29,7 +28,7 @@ exports.login = async (req, res, next) => {
   // password check when login with password
   // const passwordIsValid = bcrypt.compareSync(req.body.pass, user.pass)
   // if(!passwordIsValid) return res.status(403).json({ error: 'Not Authorized' })
-  const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
+  const token = auth.generateAccessToken(user._id)
   return res.status(200).json({auth: true, token: token})
 }
 
@@ -74,7 +73,7 @@ exports.google = async (req,res,next) => {
       slug: slug(alias)
     })
   }
-  const token = jwt.sign({id: user._id }, config.secret, { expiresIn: 86400 })
+  const token = auth.generateAccessToken(user._id)
   return res.status(status).json({ auth: true, token: token }) 
 }
 
@@ -83,7 +82,7 @@ exports.email = async (req, res, next) => {
   const user = await User.findOne({ email : email })
   if(!user) return res.status(202).json({ auth: false })
 
-  const token = jwt.sign({id: user._id}, config.secret, { expiresIn: 86400 })
+  const token = auth.generateAccessToken(user._id)
   mailSender.sendMagicLink(user, token)
   return res.status(200).json({ auth : true })
 }
@@ -97,7 +96,7 @@ exports.emailRegister = async (req, res, next) => {
     slug: slug(req.body.alias.toLowerCase())
     //pass: hashedPassword
   })
-  const token = jwt.sign({id: user._id }, config.secret, { expiresIn: 86400 })
+  const token = auth.generateAccessToken(user._id)
   mailSender.sendMagicLink(user, token)
   return res.json({ auth: true })
 }
@@ -106,4 +105,5 @@ exports.me = async (req, res, next) => {
   const user = await User.findById(req.userId)
   if(user) return res.status(200).json(user)
   return res.status(404).json({ success: false })
+  // En register y login, con el magic link, le paso un token que expira muy pronto, en el /me ya le doy el refresh y el token bueno. si caducara alguna autenticacion, peticion a /refresh
 }

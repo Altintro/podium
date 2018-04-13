@@ -5,8 +5,6 @@ var router = require('express-promise-router')()
 var gameController = require('../../controllers/gameController')
 var authRequired = require('../../controllers/authController').authRequired
 
-
-
 router.get('/',gameController.getGames)
 router.get('/:id',gameController.getGame)
 
