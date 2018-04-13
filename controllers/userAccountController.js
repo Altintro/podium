@@ -1,12 +1,13 @@
 'use_strict'
-
+ 
 const config = require('../config')
 const bcrypt = require('bcryptjs')
-const mailSender = require('./../utils/mailSender')
 const slug = require('slug')
 
 const auth = require('./authController')
+const mailSender = require('../utils/mailSender')
 const User = require('../models/User')
+const RefreshToken = require('../models/RefreshToken')
 
 function mapBasicUser(user) {
   return {
@@ -29,6 +30,7 @@ exports.login = async (req, res, next) => {
   // const passwordIsValid = bcrypt.compareSync(req.body.pass, user.pass)
   // if(!passwordIsValid) return res.status(403).json({ error: 'Not Authorized' })
   const token = auth.generateAccessToken(user._id)
+  const refresh = auth.generateRefreshToken(user._id)
   return res.status(200).json({auth: true, token: token})
 }
 
@@ -73,8 +75,9 @@ exports.google = async (req,res,next) => {
       slug: slug(alias)
     })
   }
-  const token = auth.generateAccessToken(user._id)
-  return res.status(status).json({ auth: true, token: token }) 
+  const accessToken = auth.generateAccessToken(user._id)
+  const refreshToken = auth.generateRefreshToken(user._id)
+  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken }) 
 }
 
 exports.email = async (req, res, next) => { 
@@ -82,8 +85,8 @@ exports.email = async (req, res, next) => {
   const user = await User.findOne({ email : email })
   if(!user) return res.status(202).json({ auth: false })
 
-  const token = auth.generateAccessToken(user._id)
-  mailSender.sendMagicLink(user, token)
+  const magicToken = auth.generateMagicLinkToken(user._id)
+  mailSender.sendMagicLink(user,magicToken)
   return res.status(200).json({ auth : true })
 }
 
@@ -96,14 +99,34 @@ exports.emailRegister = async (req, res, next) => {
     slug: slug(req.body.alias.toLowerCase())
     //pass: hashedPassword
   })
-  const token = auth.generateAccessToken(user._id)
-  mailSender.sendMagicLink(user, token)
+  const magicToken = auth.generateMagicLinkToken(user._id)
+  mailSender.sendMagicLink(user,magicToken)
   return res.json({ auth: true })
 }
 
-exports.me = async (req, res, next) => {
+exports.tokens = async (req, res, next) => {
   const user = await User.findById(req.userId)
-  if(user) return res.status(200).json(user)
-  return res.status(404).json({ success: false })
-  // En register y login, con el magic link, le paso un token que expira muy pronto, en el /me ya le doy el refresh y el token bueno. si caducara alguna autenticacion, peticion a /refresh
+  if(!user) return res.status(400).json({ auth: false })
+  const accessToken = auth.generateAccessToken(req.userId)
+  const refreshToken = await auth.generateRefreshToken(req.userId)
+  return res.status(200).json({ auth: true,
+    accessToken: accessToken,
+    refreshToken: refreshToken.token })
 }
+
+exports.refreshToken = async (req, res, next) => {
+  const query = { token : req.params.refreshToken }
+  const refreshToken = await RefreshToken.findOne(query)
+  if(!refreshToken) return res.status(401).json({ auth: false })
+  const accessToken = auth.generateAccessToken()
+  return res.status(200).json({ auth: true, token: accessToken})
+}
+
+exports.revokeTokens = async (req,res,next) => {
+  const query = { user: req.userId }
+  await RefreshToken.find(query).remove()
+  return res.status(200).json({ success: true })
+}
+
+
+

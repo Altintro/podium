@@ -30,10 +30,7 @@ exports.sendMagicLink =  (user, token) => {
   }
 
   transporter.sendMail(mailOptions, (err, info) => {
-    if(err){
-      console.log(err)
-    } else {
-      console.log(info)
-    }
+    var log = err ? err : info
+    console.log(log)
   })
 }

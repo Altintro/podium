@@ -12,11 +12,13 @@ router.post('/emailConnect',userAccountController.email)
 router.post('/emailRegister',userAccountController.emailRegister)
 router.post('/checkEmail', userAccountController.checkEmail)
 router.post('/checkAlias', userAccountController.checkAlias)
+router.post('/refreshToken/:refreshToken',userAccountController.refreshToken)
 router.get('/', userController.getUsers)
 router.get('/detail/:id', userController.getUser)
 
 router.use(authRequired);
-router.get('/me', userAccountController.me)
+router.get('/tokens', userAccountController.tokens)
+router.post('/revokeTokens',userAccountController.revokeTokens)
 router.delete('/:id', userController.deleteUser)
 
 

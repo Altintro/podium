@@ -46,15 +46,31 @@
 
 This server needs authentication for most of requests , in order to make requests you will need to be register as an *User* and have an **access token**.
 
-**IMPORTANT**: The response for a successfull register/login request will be an *access token* that should be use to authenticate in	**most of the requests as a header** (x-access-token) in order to get a response from the server. Copy the token and save it for further requests.
+**IMPORTANT**: The response for a successfull register/login request will be an *access token* and *refresh token*. Access-token  should be use to authenticate in	**most of the requests as a header** (x-access-token) in order to get a response from the server. Copy the token and save it for further requests. If access-token expires, use refresh-token in order to get a new one.
+
+* **Refresh Token**: Post request to */apiv1/users/refreshToken/'refresh-token'*: When access-token expires for user, he will have to call the refresh token request , with the refresh token as route parameter in orther to get a new access-token. If refresh-token is revoked or does not exist, it returns:
+	
+	```
+	{ auth: false } // User must sign in again
+	```
+if refresh token is exist for user:
+	
+	```
+	{ auth: true, token: 'access-token' }
+	```
+
+* **Revoke Tokens**:(auth required) Post request to */apiv1/users/revokeTokens** that revokes the refresh tokens available for an account. Which means that user will have to sign in again to access requests that require authentication.
+
+
 
 ### Email 
 ---
+Email sign-in and sign-up will be done via **Magic Link**. Instead of authenticating with password, users will recieve an email with magic link that will lead them to the app, where a token will be retrieved from the magic link in order to request the authentication tokens (access and refresh).
 
-* **Email Connect**: Post request to */apiv1/users/emailConnect?email='userEmail'*. Verifies weather an account exists for the email or not. if it does it returns: (notice if the account had logged in before with another method(google or facebobok) it will login anyway via email.)
+* **Email Connect**: Post request to */apiv1/users/emailConnect?email='userEmail'*. Verifies weather an account exists for the email or not. (notice if the account had logged in before with another method(google or facebobok) it will login anyway via email.) if it exists it sends a magic link to the user email account and returns: 
 
 	```
-	{ auth: true } // status 200, send a magic link!
+	{ auth: true } // status 200
 	```
 	
 	If it doesn't exist, it returns :
@@ -77,7 +93,13 @@ This server needs authentication for most of requests , in order to make request
 	```
 	{ auth: true }
 	```
-* **Me**: (auth required) Post request to */apiv1/users/me*: Sends the user information for the token provided in the header of the request.
+* **Tokens**: (auth required) Post request to */apiv1/users/tokens*.Token sent in this request must be the one **recieved within the magic link**. If token is valid, it returns a new access-token and refresh-token for the user.
+	
+	```
+	{ auth: true,
+	  accessToken: 'access-token',
+	  refreshToken: 'refresh-token'}
+	```
 
 ### Google
 ---
