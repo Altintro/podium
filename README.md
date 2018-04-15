@@ -141,7 +141,7 @@ Once you've registered and have an *access-token* you will be able to get respon
 	  description: 'sport_description',
 	  rules: 'sport_rules' }
 	```
-* **Upload sport image**: Post request to */apiv1/sports/'sportObjectId'*. Image should be in the body of the request with value 'image'.
+* **Upload sport image**: Post request to */apiv1/sports/uploadImage/'sportObjectId'*. Image should be in the body of the request with value 'image'.
 
 ### Games
 ---
