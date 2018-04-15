@@ -5,7 +5,7 @@ const slug = require('slug')
 const Sport = require('../models/Sport')
 const fs = require('fs')
 
-const baseFilesURL = config.host + '/files/sports/'
+const baseSportsImagesURL = config.host + '/images/sports/'
 
 function mapBasicSport(sport) {
   return {
@@ -14,7 +14,7 @@ function mapBasicSport(sport) {
     description: sport.description,
     rules: sport.rules,
     popularity: sport.popularity,
-    image: baseFilesURL + sport.slug + '/' + (sport.image || 'default.png')
+    image: baseSportsImagesURL + sport.slug + '/' + (sport.image || 'default.png')
   }
 }
 
@@ -35,16 +35,16 @@ exports.postSport = async (req,res,next) => {
 }
 
 exports.uploadSportImage = async (req, res, next) => {
-  console.log(req.file)
   const sport = await Sport.findById(req.params.id)
   let uploadsPath = __dirname + '/../../public/images/sports/uploads/'
   let imagePath = __dirname + '/../../public/images/sports/' + sport.slug
   if(!fs.existsSync(imagePath)) fs.mkdirSync(imagePath)
   fs.rename(uploadsPath + req.file.filename,
-   imagePath + '/' + req.file.filename,
+   imagePath + '/' + req.file.originalname,
     (err) => {
     if (err) return next(err)
   })
+  sport.image = req.file.originalname
   await sport.save()
   return res.json({ success: true })
 }

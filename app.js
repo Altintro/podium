@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images',express.static(path.join(__dirname ,'../public','images')));
 
 app.use('/', require('./routes/index'));
 app.use('/apiv1/users', require('./routes/apiv1/users'));

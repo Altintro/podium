@@ -7,7 +7,7 @@ const slug = require('slug')
 const auth = require('./authController')
 const mailSender = require('../utils/mailSender')
 const User = require('../models/User')
-const RefreshToken = require('../models/RefreshToken')
+const RevokedToken = require('../models/RevokedToken')
 
 function mapBasicUser(user) {
   return {
@@ -30,8 +30,7 @@ exports.login = async (req, res, next) => {
   // const passwordIsValid = bcrypt.compareSync(req.body.pass, user.pass)
   // if(!passwordIsValid) return res.status(403).json({ error: 'Not Authorized' })
   const token = auth.generateAccessToken(user._id)
-  const refresh = auth.generateRefreshToken(user._id)
-  return res.status(200).json({auth: true, token: token})
+  return res.status(200).json({auth: true, accessToken: token})
 }
 
 exports.checkEmail = async (req, res, next) => {
@@ -77,7 +76,7 @@ exports.google = async (req,res,next) => {
   }
   const accessToken = auth.generateAccessToken(user._id)
   const refreshToken = auth.generateRefreshToken(user._id)
-  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken.token }) 
+  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken }) 
 }
 
 exports.email = async (req, res, next) => { 
@@ -108,26 +107,19 @@ exports.tokens = async (req, res, next) => {
   const user = await User.findById(req.userId)
   if(!user) return res.status(400).json({ auth: false })
   const accessToken = auth.generateAccessToken(req.userId)
-  const refreshToken = await auth.generateRefreshToken(req.userId)
+  const refreshToken = auth.generateRefreshToken(req.userId)
   return res.status(200).json({ auth: true,
     accessToken: accessToken,
-    refreshToken: refreshToken.token })
+    refreshToken: refreshToken })
 }
 
 exports.refreshToken = async (req, res, next) => {
-  const refresh = req.headers['x-refresh-token']
-  const query = { token : refresh }
-  const refreshToken = await RefreshToken.findOne(query)
-  if(!refreshToken) return res.status(401).json({ auth: false })
-  const accessToken = auth.generateAccessToken()
-  return res.status(200).json({ auth: true, token: accessToken})
+  const revokedToken = await RevokedToken.findOne({ token : req.refreshToken })
+  if (revokedToken) return res.status(401).json({ auth: false  })
+  const token  = auth.generateAccessToken(req.userId)
+  return res.status(200).json({ auth: true, accessToken: token })
 }
 
-exports.revokeTokens = async (req,res,next) => {
-  const query = { user: req.userId }
-  await RefreshToken.find(query).remove()
-  return res.status(200).json({ success: true })
-}
 
 
 

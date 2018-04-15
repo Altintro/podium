@@ -56,11 +56,8 @@ This server needs authentication for most of requests , in order to make request
 if refresh token is exist for user:
 	
 	```
-	{ auth: true, token: 'access-token' }
+	{ auth: true, accessToken: 'access-token' }
 	```
-
-* **Revoke Tokens**:(auth required) Post request to */apiv1/users/revokeTokens** that revokes the refresh tokens available for an account. Which means that user will have to sign in again to access requests that require authentication.
-
 
 
 ### Email 
@@ -106,13 +103,13 @@ Email sign-in and sign-up will be done via **Magic Link**. Instead of authentica
 * **Google Connect**: Post request to */apiv1/users/googleConnect?googleToken='user_token_google'*. If user exists and is merged with google, it logs in, if its not merge with google it merges the user with google and logs in anyway. both return:
 	
 	```
-	{ auth: true, token: token } // status 200, user sign-in successfully
+	{ auth: true, accessToken: token, refreshToken: token } // status 200, user sign-in successfully
 	```
 	
 	If user does not exist:
 
 	```
-	{ auth : true, token: token } // status 201 , user signed-up successfully
+	{ auth : true, accessToken: token, refreshToken: token } // status 201 , user signed-up successfully
 	```
 	
 ### Facebobok // TODO
@@ -132,6 +129,19 @@ The response for the request will be an *access token* that should be use in **r
 ## Usage
 
 Once you've registered and have an *access-token* you will be able to get responses with documents from the DataBase, by adding a header with key as **x-access-token** and value as your token.
+
+### Sports
+---
+
+* **Get Sports**: In order to recieve the sports in the database make a get requst to */apiv1/sports*.
+* **Post Sport**: In order to upload a new sport to the database, make a post request to *apiv1/sports*. The body of the request must contain the following information:
+
+	```
+	{ name: 'sport_name',
+	  description: 'sport_description',
+	  rules: 'sport_rules' }
+	```
+* **Upload sport image**: Post request to */apiv1/sports/'sportObjectId'*. Image should be in the body of the request with value 'image'.
 
 ### Games
 ---
