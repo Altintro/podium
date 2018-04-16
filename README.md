@@ -112,8 +112,23 @@ Email sign-in and sign-up will be done via **Magic Link**. Instead of authentica
 	{ auth : true, accessToken: token, refreshToken: token } // status 201 , user signed-up successfully
 	```
 	
-### Facebobok // TODO
+### Facebobok 
 ---
+
+* **Facebook Connect**: Post request to */apiv1/users/facebookConnect?fbToken='user_token_facebook'*. If user exists and is merged with facebook, it logs in, if its not merge with facebook it merges the user with facebook and logs in anyway. both return:
+	
+	```
+	{ auth: true, accessToken: token, refreshToken: token } // status 200, user sign-in successfully
+	```
+	
+	If user does not exist:
+
+	```
+	{ auth : true, accessToken: token, refreshToken: token } // status 201 , user signed-up successfully
+	```
+	
+
+
 ### Login Gateway // Testing only, will be deprecated
 ---
 
