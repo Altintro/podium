@@ -3,8 +3,8 @@
 var jwt = require('jsonwebtoken')
 var config = require('../config')
 var shortid = require('shortid')
+var axios = require('axios')
 
-const mailSender = require('../utils/mailSender')
 const {OAuth2Client} = require('google-auth-library');
 const googleClientId = config.google_client_id
 const client = new OAuth2Client(googleClientId);
@@ -53,6 +53,11 @@ exports.verifyGoogleToken = (googleToken) => {
   return info = client.verifyIdToken({
     idToken: googleToken,
     audience: googleClientId})
+}
+
+exports.verifyFacebookToken = (fbToken) => {
+  let url = 'https://graph.facebook.com/me?fields=email,name,picture,birthday&access_token=' + fbToken
+  return axios.get(url)
 }
 
 

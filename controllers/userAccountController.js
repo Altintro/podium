@@ -3,9 +3,10 @@
 const config = require('../config')
 const bcrypt = require('bcryptjs')
 const slug = require('slug')
+const axios = require('axios')
 
 const auth = require('./authController')
-const mailSender = require('../utils/mailSender')
+const mailSender = require('../lib/mailSender')
 const User = require('../models/User')
 const RevokedToken = require('../models/RevokedToken')
 
@@ -51,17 +52,12 @@ exports.checkAlias = async (req, res, next) => {
 }
 
 exports.google = async (req,res,next) => {
-  let status
+  let status = 200
   const info = await auth.verifyGoogleToken(req.query.googleToken)
   const payload = info.payload
   let user = await User.findOne({ email: payload.email })
-  
-  if(user && !user.mergedWithGoogle) {
-    status = 200
-    user.google = payload
-    user.mergedWithGoogle = true
-    await user.save()
-  } else {
+
+  if(!user){
     status = 201
     const alias = auth.generateAlias(payload.name)
     user = await User.create({
@@ -73,6 +69,38 @@ exports.google = async (req,res,next) => {
       email: payload.email,
       slug: slug(alias)
     })
+  } else if (!user.mergedWithGoogle){
+    user.google = payload
+    user.mergedWithGoogle = true
+    await user.save()
+  }
+  const accessToken = auth.generateAccessToken(user._id)
+  const refreshToken = auth.generateRefreshToken(user._id)
+  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken }) 
+}
+
+exports.facebook = async (req,res,next) => {
+  let status = 200
+  const payload = await auth.verifyFacebookToken(req.query.fbToken)
+  const fb = payload.data
+  let user = await User.findOne({ email:fb.email })
+
+  if(!user) {
+    status = 201
+    const alias = auth.generateAlias(fb.name)
+    user = await User.create({
+      facebook: fb,
+      hasPassword: false,
+      mergedWithFacebook: true,
+      name: fb.name,
+      alias: alias,
+      email: fb.email,
+      slug: slug(alias)
+    })
+  } else if(!user.mergedWithFacebook) {
+    user.facebook = fb
+    user.mergedWithFacebook = true
+    await user.save()
   }
   const accessToken = auth.generateAccessToken(user._id)
   const refreshToken = auth.generateRefreshToken(user._id)

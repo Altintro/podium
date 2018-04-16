@@ -18,10 +18,14 @@ const userSchema = Schema({
     ranking: [{ sport: String, ranking: Number, points: Number }],
     interests: [{ type: Schema.Types.ObjectId, ref: 'Sport' }],
 
-    fb: {
+    facebook: {
         id: { type: String, default: "", index: true },
         name: { type: String, default: "" },
-        picture: { type: String, default: "" },
+        picture: { 
+          data: { 
+            url: { type: String, default: "" }
+          }
+        },
         email: { type: String, default: "" }
     },
 
@@ -33,7 +37,7 @@ const userSchema = Schema({
     },
 
     hasPassword: { type: Boolean, default: false },
-    mergedWithFB: { type: Boolean, default: false },
+    mergedWithFacebook: { type: Boolean, default: false },
     mergedWithGoogle: {type: Boolean, default: false},
 
     tournamentsPlayed: [{ type: Schema.Types.ObjectId, ref :'Tournament' }],

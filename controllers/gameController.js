@@ -4,14 +4,15 @@ const Team = require('../models/Team')
 const User = require('../models/User')
 const Sport = require('../models/Sport')
 
+const sportsController = require('./sportsController')
+
 function mapBasicGame(game) {
   return {
     _id: game.id,
     name: game.name,
-    sport: game.sport,
-    //levelAverage: game.levelAverage,
+    sport: sportsController.mapBasicSport(game.sport),
     open: game.open,
-    modality: game.modality
+    modality: game.modality,
   }
 }
 
@@ -40,7 +41,7 @@ exports.getGame = async (req, res, next) => {
 
 exports.postGame = async (req, res, send) => {
   const team = await Team.create({  players:[{ _id: req.userId }] })
-  const sport = await Sport.findOne({ name: req.body.sport })
+  const sport = await Sport.findOne({ slug: req.body.sport.toLowerCase() })
   const game = await Game.create({ 
     name: req.body.name,
     participants: [team._id] ,

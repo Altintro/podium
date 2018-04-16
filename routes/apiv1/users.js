@@ -9,6 +9,7 @@ var authRefresh = require('../../controllers/authController').authRefresh
 
 router.post('/login',userAccountController.login )
 router.post('/googleConnect', userAccountController.google)
+router.post('/facebookConnect', userAccountController.facebook)
 router.post('/emailConnect',userAccountController.email)
 router.post('/emailRegister',userAccountController.emailRegister)
 router.post('/checkEmail', userAccountController.checkEmail)

@@ -18,6 +18,8 @@ function mapBasicSport(sport) {
   }
 }
 
+exports.mapBasicSport = mapBasicSport
+
 exports.getSports = async (req, res, next) => {
   var sports = await Sport.find()
   sports = sports.map(mapBasicSport)
