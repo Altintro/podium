@@ -87,7 +87,7 @@ exports.google = async (req,res,next) => {
 
 exports.facebook = async (req,res,next) => {
   let status = 200
-  let type = 'singin'
+  let type = 'signin'
   const payload = await auth.verifyFacebookToken(req.query.fbToken)
   const fb = payload.data
   let user = await User.findOne({ email:fb.email })
