@@ -53,11 +53,13 @@ exports.checkAlias = async (req, res, next) => {
 
 exports.google = async (req,res,next) => {
   let status = 200
+  let type = 'signin'
   const info = await auth.verifyGoogleToken(req.query.googleToken)
   const payload = info.payload
   let user = await User.findOne({ email: payload.email })
 
   if(!user){
+    type = 'signup'
     status = 201
     const alias = auth.generateAlias(payload.name)
     user = await User.create({
@@ -76,17 +78,23 @@ exports.google = async (req,res,next) => {
   }
   const accessToken = auth.generateAccessToken(user._id)
   const refreshToken = auth.generateRefreshToken(user._id)
-  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken }) 
+  return res.status(status).json({ 
+    auth: true,
+    type: type,
+    accessToken: accessToken,
+    refreshToken: refreshToken })  
 }
 
 exports.facebook = async (req,res,next) => {
   let status = 200
+  let type = 'singin'
   const payload = await auth.verifyFacebookToken(req.query.fbToken)
   const fb = payload.data
   let user = await User.findOne({ email:fb.email })
 
   if(!user) {
     status = 201
+    type = 'signup'
     const alias = auth.generateAlias(fb.name)
     user = await User.create({
       facebook: fb,
@@ -104,7 +112,11 @@ exports.facebook = async (req,res,next) => {
   }
   const accessToken = auth.generateAccessToken(user._id)
   const refreshToken = auth.generateRefreshToken(user._id)
-  return res.status(status).json({ auth: true, accessToken: accessToken, refreshToken: refreshToken }) 
+  return res.status(status).json({ 
+     auth: true,
+     type: type,
+     accessToken: accessToken,
+     refreshToken: refreshToken }) 
 }
 
 exports.email = async (req, res, next) => { 
