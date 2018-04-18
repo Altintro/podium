@@ -251,4 +251,5 @@ Once you've registered and have an *access-token* you will be able to get respon
 
 	(Adding games=true or games=false to the query, populates the 	property *gamesPlaying* of the game being recieved or not, with the Game 	objects that the user is participating in)
 
-* **Delete User**: (auth required) Delete request to /apiv1/users/userObjectid
+* **Delete User**: (auth required) Delete request to */apiv1/users/userObjectid*
+* **Update User**: (auth required) Post request to */api/users/update?sports='sport_names_separated_by_commas&alias='alias'*
