@@ -6,11 +6,11 @@ var gameController = require('../../controllers/gameController')
 var authRequired = require('../../controllers/authController').authRequired
 
 router.get('/', gameController.getGames)
-router.get('/:id',gameController.getGame)
+router.get('/:id/detail',gameController.getGame)
 
 router.use(authRequired)
 router.post('/',gameController.postGame)
-router.post('/signup/:id',gameController.signUpGame)
+router.post('/:id/signup',gameController.signUpGame)
 router.delete('/:id',gameController.deleteGame)
 
 module.exports = router

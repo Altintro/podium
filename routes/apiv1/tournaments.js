@@ -7,11 +7,11 @@ var tournamentController = require('../../controllers/tournamentController')
 var authRequired = require('../../controllers/authController').authRequired
 
 router.get('/',tournamentController.getTournaments)
-router.get('/:id', tournamentController.getTournament)
+router.get('/:id/detail', tournamentController.getTournament)
 
 router.use(authRequired)
 router.post('/', tournamentController.postTournament)
-router.post('/signup/:id', tournamentController.signUpTournament) 
+router.post('/:id/signup', tournamentController.signUpTournament) 
 router.delete('/:id',tournamentController.deleteTournament)
 
 

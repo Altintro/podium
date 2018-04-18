@@ -10,7 +10,17 @@ const mailSender = require('../lib/mailSender')
 const User = require('../models/User')
 const RevokedToken = require('../models/RevokedToken')
 
-function mapBasicUser(user) {
+function generateAuthResponse(userId, type, status, refresh, res) {
+  const accessToken = auth.generateAccessToken(userId)
+  const refreshToken = refresh ? auth.generateRefreshToken(userId) : undefined
+  return res.status(status).json({ 
+    auth: true,
+    type: type,
+    accessToken: accessToken,
+    refreshToken: refreshToken })  
+}
+
+exports.mapBasicUser = (user) => {
   return {
     _id: user.id,
     alias: user.alias,
@@ -20,16 +30,11 @@ function mapBasicUser(user) {
     }
 }
 
-exports.mapBasicUser = mapBasicUser
-
 // Deprecate
 exports.login = async (req, res, next) => {
   const query = { email : req.body.email }
   const user = await User.findOne(query)
   if (!user) return res.status(404).json({ error: 'User not found' })
-  // password check when login with password
-  // const passwordIsValid = bcrypt.compareSync(req.body.pass, user.pass)
-  // if(!passwordIsValid) return res.status(403).json({ error: 'Not Authorized' })
   const token = auth.generateAccessToken(user._id)
   return res.status(200).json({auth: true, accessToken: token})
 }
@@ -76,13 +81,7 @@ exports.google = async (req,res,next) => {
     user.mergedWithGoogle = true
     await user.save()
   }
-  const accessToken = auth.generateAccessToken(user._id)
-  const refreshToken = auth.generateRefreshToken(user._id)
-  return res.status(status).json({ 
-    auth: true,
-    type: type,
-    accessToken: accessToken,
-    refreshToken: refreshToken })  
+  return generateAuthResponse(user._id, type, status, true, res) 
 }
 
 exports.facebook = async (req,res,next) => {
@@ -110,13 +109,7 @@ exports.facebook = async (req,res,next) => {
     user.mergedWithFacebook = true
     await user.save()
   }
-  const accessToken = auth.generateAccessToken(user._id)
-  const refreshToken = auth.generateRefreshToken(user._id)
-  return res.status(status).json({ 
-     auth: true,
-     type: type,
-     accessToken: accessToken,
-     refreshToken: refreshToken }) 
+  return generateAuthResponse(user._id, type, status, true, res)
 }
 
 exports.email = async (req, res, next) => { 
@@ -130,13 +123,11 @@ exports.email = async (req, res, next) => {
 }
 
 exports.emailRegister = async (req, res, next) => {
-  // var hashedPassword = bcrypt.hashSync(req.body.pass, 8)
   const user = await User.create({
     name: req.body.name,
     alias: req.body.alias.toLowerCase().trim(),
     email: req.body.email.trim(),
     slug: slug(req.body.alias.toLowerCase())
-    //pass: hashedPassword
   })
   const magicToken = auth.generateMagicLinkToken(user._id)
   mailSender.sendMagicLink(user,magicToken)
@@ -146,18 +137,13 @@ exports.emailRegister = async (req, res, next) => {
 exports.tokens = async (req, res, next) => {
   const user = await User.findById(req.userId)
   if(!user) return res.status(400).json({ auth: false })
-  const accessToken = auth.generateAccessToken(req.userId)
-  const refreshToken = auth.generateRefreshToken(req.userId)
-  return res.status(200).json({ auth: true,
-    accessToken: accessToken,
-    refreshToken: refreshToken })
+  return generateAuthResponse(req.userId, undefined, 200, true, res)
 }
 
 exports.refreshToken = async (req, res, next) => {
   const revokedToken = await RevokedToken.findOne({ token : req.refreshToken })
   if (revokedToken) return res.status(401).json({ auth: false  })
-  const token  = auth.generateAccessToken(req.userId)
-  return res.status(200).json({ auth: true, accessToken: token })
+  return generateAuthResponse(req.userId, undefined, 200, false, res)
 }
 
 

@@ -10,6 +10,6 @@ var upload = multer({dest: '../public/images/sports/uploads/'})
 
 router.get('/',sportsController.getSports)
 router.post('/',sportsController.postSport)
-router.post('/uploadImage/:id',upload.single('image'), sportsController.uploadSportImage)
+router.post('/:id/uploadImage',upload.single('image'), sportsController.uploadSportImage)
 
 module.exports = router

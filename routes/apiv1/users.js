@@ -17,11 +17,12 @@ router.post('/checkAlias', userAccountController.checkAlias)
 router.post('/refreshToken', authRefresh, userAccountController.refreshToken)
 
 router.get('/', userController.getUsers)
-router.get('/detail/:id', userController.getUser)
+router.get('/:id/detail', userController.getUser)
 
 router.use(authRequired);
 router.get('/tokens', userAccountController.tokens)
 router.delete('/:id', userController.deleteUser)
+router.post('/update', userController.updateUser)
 
 
 

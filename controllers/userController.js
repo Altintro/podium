@@ -2,6 +2,7 @@
 
 const mapBasicUser = require('./userAccountController').mapBasicUser
 const User = require('../models/User')
+const Sport = require('../models/Sport')
 
 exports.getUsers = async (req, res, next) => {
 
@@ -21,16 +22,32 @@ exports.getUsers = async (req, res, next) => {
 }
 
 exports.getUser = async (req, res, next) => {
-
-  // With games in query as true, should populate all games properties
-  let gamesPlaying = req.query.games ? 'gamesPlaying' : ''
-  const user = await User.findById(req.params.id).select('-pwd').populate(gamesPlaying).exec()
+  const user = await User.findById(req.params.id).populate({
+    path: 'interests',
+    select: 'name image -_id',
+    options: { limit: 10 }
+  }) 
   return res.status(200).json({ result: user })
 }
 
 exports.deleteUser = async (req,res,next) => {
-    
   var query = {_id: req.params.id}
   await User.deleteOne(query).exec()
   return res.status(200).json({ deleted: true})
+}
+
+exports.updateUser = async (req, res, next) => {
+  const user = await User.findById(req.userId)
+  const alias = req.query.alias
+  let sports = req.query.sports
+  if (sports) {
+    sports = sports.split(',')
+    sports = await Sport.find({slug :sports})
+    user.interests = sports.map((sport) => {
+      return sport._id
+    })
+  }
+  if(alias) { user.alias = alias }
+  await user.save()
+  return res.status(200).json({success: true, message: 'User sports updated'})
 }
