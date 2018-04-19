@@ -1,7 +1,8 @@
 "use_strict"
 
 const mongoose = require('mongoose')
-
+const config = require('../config')
+const transporter = require('../lib/transporter').transporter
 var Schema = mongoose.Schema
 
 const userSchema = Schema({
@@ -50,6 +51,26 @@ const userSchema = Schema({
     gamesWon: [{ type: Schema.Types.ObjectId, ref: 'Game'}],
     gamesUpcoming: [{ type: Schema.Types.ObjectId, ref: 'Game'}]
 })
+
+userSchema.methods.sendMagicLink = function(token) {
+  const options = { 
+    from: "no-reply@winatpodium.com",
+    to: this.email,
+    subject: 'Sign in to Podium!', // Subject line
+    text: '${config.host}/magiclink/${token}',
+    html: `
+      <h1>Magic Link</h1>
+      <p>Hello ${this.name}, welcome to Podium.</p>
+      <p>Click on the link below to sign in!</p>
+      <a href="${config.host}/magiclink?token=${token}">
+      Magic link
+      </a>`
+  }
+  return transporter.sendMail(options, (err,info) => {
+    var log = err ? err: info
+    console.log(log)
+  })
+}
 
 var User = mongoose.model ('User', userSchema)
 module.exports = User

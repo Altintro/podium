@@ -20,7 +20,7 @@ exports.authRequired = (req,res,next) => {
   })
 }
 
-exports.authRefresh = (req, res, next) => {
+exports.authRefreshRequired = (req, res, next) => {
   const token = req.headers['x-refresh-token']
   if(!token) return res.status(400).json({ auth: false, message: 'No token provided'})
 

@@ -5,7 +5,7 @@ var router = require('express-promise-router')()
 var userController = require('../../controllers/userController')
 var userAccountController = require('../../controllers/userAccountController')
 var authRequired = require('../../controllers/authController').authRequired 
-var authRefresh = require('../../controllers/authController').authRefresh
+var authRefreshRequired = require('../../controllers/authController').authRefreshRequired
 
 router.post('/login',userAccountController.login )
 router.post('/googleConnect', userAccountController.google)
@@ -14,7 +14,7 @@ router.post('/emailConnect',userAccountController.email)
 router.post('/emailRegister',userAccountController.emailRegister)
 router.post('/checkEmail', userAccountController.checkEmail)
 router.post('/checkAlias', userAccountController.checkAlias)
-router.post('/refreshToken', authRefresh, userAccountController.refreshToken)
+router.get('/refreshToken', authRefreshRequired, userAccountController.refreshToken)
 
 router.get('/', userController.getUsers)
 router.get('/:id/detail', userController.getUser)
