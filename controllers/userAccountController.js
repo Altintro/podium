@@ -10,16 +10,6 @@ const User = require('../models/User')
 const Sport = require('../models/Sport')
 const RevokedToken = require('../models/RevokedToken')
 
-function generateAuthResponse(req, res, refresh) {
-  const accessToken = auth.generateAccessToken(req.userId)
-  const refreshToken = refresh ? auth.generateRefreshToken(req.userId) : undefined
-  return res.json({ 
-    auth: true,
-    type: res.type,
-    accessToken: accessToken,
-    refreshToken: refreshToken })  
-}
-
 exports.mapBasicUser = (user) => {
   return {
     _id: user.id,
@@ -58,13 +48,12 @@ exports.checkAlias = async (req, res, next) => {
 
 exports.google = async (req,res,next) => {
   res.status(200)
-  res.type = 'signin'
+  let type = 'signin'
   const info = await auth.verifyGoogleToken(req.query.googleToken)
   const payload = info.payload
   let user = await User.findOne({ email: payload.email })
-  console.log(payload.name)
   if(!user){
-    res.type = 'signup'
+    type = 'signup'
     res.status(201)
     const alias = auth.generateAlias(payload.name)
     user = await User.create({
@@ -81,19 +70,25 @@ exports.google = async (req,res,next) => {
     user.mergedWithGoogle = true
     await user.save()
   }
-  return generateAuthResponse(req, res, true) 
+  const accessToken = auth.generateAccessToken(user._id)
+  const refreshToken = auth.generateRefreshToken(user._id)
+  return res.json({ 
+    auth: true,
+    type: type,
+    accessToken: accessToken,
+    refreshToken: refreshToken })  
 }
 
 exports.facebook = async (req,res,next) => {
   res.status(200)
-  res.type = 'signin'
+  let type = 'signin'
   const payload = await auth.verifyFacebookToken(req.query.fbToken)
   const fb = payload.data
   let user = await User.findOne({ email:fb.email })
 
   if(!user) {
     res.status(201)
-    res.type = 'signup'
+    type = 'signup'
     const alias = auth.generateAlias(fb.name)
     user = await User.create({
       facebook: fb,
@@ -109,7 +104,13 @@ exports.facebook = async (req,res,next) => {
     user.mergedWithFacebook = true
     await user.save()
   }
-  return generateAuthResponse(req, res, true)
+  const accessToken = auth.generateAccessToken(user._id)
+  const refreshToken = auth.generateRefreshToken(user._id)
+  return res.json({ 
+    auth: true,
+    type: type,
+    accessToken: accessToken,
+    refreshToken: refreshToken })  
 }
 
 exports.socialRegisterUserUpdate = async (req, res, next) => {
@@ -154,13 +155,21 @@ exports.emailRegister = async (req, res, next) => {
 exports.tokens = async (req, res, next) => {
   const user = await User.findById(req.userId)
   if(!user) return res.status(400).json({ auth: false })
-  return generateAuthResponse(req, res.status(200), true)
+  const accessToken = auth.generateAccessToken(req.userId)
+  const refreshToken = auth.generateRefreshToken(req.userId)
+  return res.status(200).json({ 
+    auth: true,
+    accessToken: accessToken,
+    refreshToken: refreshToken }) 
 }
 
 exports.refreshToken = async (req, res, next) => {
   const revokedToken = await RevokedToken.findOne({ token : req.refreshToken })
   if (revokedToken) return res.status(401).json({ auth: false  })
-  return generateAuthResponse(req, res.status(200), false)
+  const accessToken = auth.generateAccessToken(req.userId)
+  return res.status(200).json({ 
+    auth: true,
+    accessToken: accessToken }) 
 }
 
 

@@ -20,8 +20,8 @@ router.get('/', userController.getUsers)
 router.get('/:id/detail', userController.getUser)
 
 router.use(authRequired);
-router.get('/tokens', userAccountController.tokens)
 router.post('/socialRegister', userAccountController.socialRegisterUserUpdate)
+router.get('/tokens', userAccountController.tokens)
 router.delete('/:id', userController.deleteUser)
 
 
