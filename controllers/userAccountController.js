@@ -7,6 +7,7 @@ const axios = require('axios')
 
 const auth = require('./authController')
 const User = require('../models/User')
+const Sport = require('../models/Sport')
 const RevokedToken = require('../models/RevokedToken')
 
 function generateAuthResponse(req, res, refresh) {
@@ -65,8 +66,7 @@ exports.google = async (req,res,next) => {
   if(!user){
     res.type = 'signup'
     res.status(201)
-    //const alias = auth.generateAlias(payload.name)
-    const alias = 'sofnasoifjdaoijqoiedjaed'
+    const alias = auth.generateAlias(payload.name)
     user = await User.create({
       google: payload,
       hasPassword: false,
@@ -112,6 +112,23 @@ exports.facebook = async (req,res,next) => {
   return generateAuthResponse(req, res, true)
 }
 
+exports.socialRegisterUserUpdate = async (req, res, next) => {
+  const user = await User.findById(req.userId)
+  const alias = req.query.alias
+  let sports = req.query.sports
+  if (sports) {
+    sports = sports.split(',')
+    sports = await Sport.find({slug :sports})
+    user.interests = sports.map((sport) => {
+      return sport._id
+    })
+  }
+  if(alias) { user.alias = alias }
+  await user.save()
+  return res.status(200).json({ auth: true })
+}
+
+
 exports.email = async (req, res, next) => { 
   const email = req.query.email.trim()
   const user = await User.findOne({ email : email })
@@ -143,7 +160,7 @@ exports.tokens = async (req, res, next) => {
 exports.refreshToken = async (req, res, next) => {
   const revokedToken = await RevokedToken.findOne({ token : req.refreshToken })
   if (revokedToken) return res.status(401).json({ auth: false  })
-  return generateAuthResponse(req, res.status(200), true)
+  return generateAuthResponse(req, res.status(200), false)
 }
 
 

@@ -21,8 +21,9 @@ router.get('/:id/detail', userController.getUser)
 
 router.use(authRequired);
 router.get('/tokens', userAccountController.tokens)
+router.post('/socialRegister', userAccountController.socialRegisterUserUpdate)
 router.delete('/:id', userController.deleteUser)
-router.post('/update', userController.updateUser)
+
 
 
 

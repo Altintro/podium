@@ -35,19 +35,3 @@ exports.deleteUser = async (req,res,next) => {
   await User.deleteOne(query).exec()
   return res.status(200).json({ deleted: true})
 }
-
-exports.updateUser = async (req, res, next) => {
-  const user = await User.findById(req.userId)
-  const alias = req.query.alias
-  let sports = req.query.sports
-  if (sports) {
-    sports = sports.split(',')
-    sports = await Sport.find({slug :sports})
-    user.interests = sports.map((sport) => {
-      return sport._id
-    })
-  }
-  if(alias) { user.alias = alias }
-  await user.save()
-  return res.status(200).json({success: true, message: 'User sports updated'})
-}
