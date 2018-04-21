@@ -141,11 +141,19 @@ exports.email = async (req, res, next) => {
 }
 
 exports.emailRegister = async (req, res, next) => {
+  let sports = req.query.sports
+  if(sports) {
+    sports = sports.split(',')
+    sports = await Sport.find({slug: sports})
+  }
   const user = await User.create({
     name: req.body.name,
     alias: req.body.alias.toLowerCase().trim(),
     email: req.body.email.trim(),
-    slug: slug(req.body.alias.toLowerCase())
+    slug: slug(req.body.alias.toLowerCase()),
+    interests: sports.map((sport) => {
+      return sport._id
+    })
   })
   const magicToken = auth.generateMagicLinkToken(user._id)
   user.sendMagicLink(magicToken)
