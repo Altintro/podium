@@ -39,13 +39,15 @@ exports.getGame = async (req, res, next) => {
   res.status(200).json({ result: game })
 }
 
-exports.postGame = async (req, res, send) => {
+exports.createGame = async (req, res, send) => {
+  console.log(req.body)
   const team = await Team.create({  players:[{ _id: req.userId }] })
   const sport = await Sport.findOne({ slug: req.body.sport.toLowerCase() })
   const game = await Game.create({ 
     name: req.body.name,
     participants: [team._id] ,
-    sport: sport._id
+    sport: sport._id,
+    description: req.body.description
   })
   const query = { _id: req.userId }
   const operation = { $push: { gamesPlaying: game._id }}

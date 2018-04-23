@@ -1,5 +1,5 @@
 # Node API - Podium
-#### Deployed: [node.winatpodium.com](https://node.winatpodium.com)
+#### Deployed: [api.winatpodium.com](https://node.winatpodium.com)
 ## Instalation
 
 1. Download or clone the project
