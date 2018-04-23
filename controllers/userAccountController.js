@@ -115,8 +115,8 @@ exports.facebook = async (req,res,next) => {
 
 exports.socialRegisterUserUpdate = async (req, res, next) => {
   const user = await User.findById(req.userId)
-  const alias = req.query.alias
-  let sports = req.query.sports
+  const alias = req.body.alias
+  let sports = req.body.sports
   if (sports) {
     sports = sports.split(',')
     sports = await Sport.find({slug :sports})
@@ -141,20 +141,22 @@ exports.email = async (req, res, next) => {
 }
 
 exports.emailRegister = async (req, res, next) => {
-  let sports = req.query.sports
-  if(sports) {
-    sports = sports.split(',')
-    sports = await Sport.find({slug: sports})
-  }
-  const user = await User.create({
+  console.log(req.body)
+  const user = await new User({
     name: req.body.name,
     alias: req.body.alias.toLowerCase().trim(),
     email: req.body.email.trim(),
-    slug: slug(req.body.alias.toLowerCase()),
-    interests: sports.map((sport) => {
+    slug: slug(req.body.alias.toLowerCase())
+  })
+  let sports = req.body.sports
+  if(sports) {
+    sports = sports.split(',')
+    sports = await Sport.find({slug: sports})
+    user.interests = sports.map((sport) => {
       return sport._id
     })
-  })
+  }
+  await user.save()
   const magicToken = auth.generateMagicLinkToken(user._id)
   user.sendMagicLink(magicToken)
   return res.json({ auth: true })

@@ -5,6 +5,7 @@ const User = require('../models/User')
 const Sport = require('../models/Sport')
 
 const sportsController = require('./sportsController')
+const userAccountController = require('./userAccountController')
 
 function mapBasicGame(game) {
   return {
