@@ -12,6 +12,7 @@ function mapBasicGame(game) {
     _id: game.id,
     name: game.name,
     sport: sportsController.mapBasicSport(game.sport),
+    participants: game.participants.map(userAccountController.mapBasicUser),
     open: game.open,
     modality: game.modality,
   }
@@ -25,7 +26,8 @@ exports.getGames = async (req, res, next) => {
   let games = await Game.find(filter)
   .limit(limit)
   .sort(sort)
-  .populate('sport')
+  .populate({ path:'sport', select: 'name image'})
+  .populate({ path:'participants', select: 'name alias profilePic', options: { limit: 3 }})
   .exec()
   games = games.map(mapBasicGame)
   return res.status(200).json({ result: games })
@@ -42,11 +44,10 @@ exports.getGame = async (req, res, next) => {
 
 exports.createGame = async (req, res, send) => {
   console.log(req.body)
-  const team = await Team.create({  players:[{ _id: req.userId }] })
   const sport = await Sport.findOne({ slug: req.body.sport.toLowerCase() })
   const game = await Game.create({ 
     name: req.body.name,
-    participants: [team._id] ,
+    participants: [req.userId] ,
     sport: sport._id,
     description: req.body.description
   })
@@ -56,18 +57,14 @@ exports.createGame = async (req, res, send) => {
   res.status(200).json({success: true })
 }
 
-exports.signUpGame = async (req, res, send) => {
-
-  // TODO: Check for user already in a team
-  const team = await Team.create({ players: [{ _id: req.userId}] })
+exports.joinGame = async (req, res, send) => {
   let query = { _id: req.params.id }
-  let operation = { $push: { participants: team._id }}
+  let operation = { $push: { participants: req.userId }}
   const game = await Game.update(query,operation)
   query = { _id: req.userId }
   operation = { $push: { gamesPlaying: req.params.id }}
   const user = await User.update(query,operation)
   return res.status(200).json({ success: true })
-
 }
 
 exports.deleteGame = async (req,res,next) => {

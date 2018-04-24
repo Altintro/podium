@@ -10,7 +10,7 @@ router.get('/:id/detail',gameController.getGame)
 
 router.use(authRequired)
 router.post('/',gameController.createGame)
-router.post('/:id/signup',gameController.signUpGame)
+router.post('/:id/join',gameController.joinGame)
 router.delete('/:id',gameController.deleteGame)
 
 module.exports = router

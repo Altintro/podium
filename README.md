@@ -82,7 +82,8 @@ Email sign-in and sign-up will be done via **Magic Link**. Instead of authentica
 	{
 	name: name,
 	alias: alias,
-	email: email
+	email: email,
+	sports: "sport1, sport2,sport3"
 	}
 	```
 	Sends magic link to the user, if the magic link has been sent 	successfully, the request returns:
@@ -147,6 +148,17 @@ Email sign-in and sign-up will be done via **Magic Link**. Instead of authentica
 	} // status 201 , user signed-up successfully
 	```
 
+### Social Adding Parameters when registration
+When registering thorugh social media, user is created with a given alias and no interests. To update user alias and interests:
+ * **Social Register**: (auth required) post request to /apiv1/users/socialRegister with a body in the request:
+ 
+ 	```
+ 	{
+ 	alias: "alias",
+ 	sports: "sport1,sport2,sport3"
+ 	}
+ 	```
+
 ### Login Gateway // Testing only, will be deprecated
 ---
 
@@ -193,12 +205,14 @@ Once you've registered and have an *access-token* you will be able to get respon
 	
 	```
 	{
-	name: 'name_of_game'
-	sport: 'sport_of_game'
+	name: 'name_of_game',
+	sport: 'sport_of_game',
+	description: 'game_desc',
+	date: 'date'
 	}
 	```
 	
-* **Subscribe to Game**: (auth required) Post request to */apiv1/games/gameObjectid/signup*.
+* **Subscribe to Game**: (auth required) Post request to */apiv1/games/gameObjectid/join*.
 
 * **Delete Game** : (auth required) Delete request to */apiv1/games/gameObjectid*
 
