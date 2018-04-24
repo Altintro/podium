@@ -2,6 +2,9 @@
 
 const mongoose = require('mongoose')
 const config = require('../config')
+const path = require('path')
+const fs = require('fs')
+const axios = require('axios')
 const transporter = require('../lib/transporter').transporter
 var Schema = mongoose.Schema
 
@@ -70,6 +73,22 @@ userSchema.methods.sendMagicLink = function(token) {
     var log = err ? err: info
     console.log(log)
   })
+}
+
+userSchema.methods.downloadProfilePic = async function(url) {
+  const imagePath = path.resolve('../public/images/users/' + this.slug)
+  const response = await axios({
+    method: 'GET',
+    url: url,
+    responseType: 'stream'
+  }).catch((err) => {
+    console.log(err)
+  })
+
+  if(!fs.existsSync(imagePath)) fs.mkdirSync(imagePath)
+  const name = this.slug + 'profilePic.jpg'
+  response.data.pipe(fs.createWriteStream(imagePath + '/' + name))
+  this.profilePic = name
 }
 
 var User = mongoose.model ('User', userSchema)

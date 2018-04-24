@@ -1,14 +1,14 @@
 'use_strict'
  
 const config = require('../config')
-const bcrypt = require('bcryptjs')
 const slug = require('slug')
-const axios = require('axios')
 
 const auth = require('./authController')
 const User = require('../models/User')
 const Sport = require('../models/Sport')
 const RevokedToken = require('../models/RevokedToken')
+
+const baseUserImagesURL = config.host + '/images/users/'
 
 exports.mapBasicUser = (user) => {
   return {
@@ -16,7 +16,7 @@ exports.mapBasicUser = (user) => {
     alias: user.alias,
     name: user.name,
     email: user.email,
-    profilePic: user.profilePic
+    profilePic: baseUserImagesURL + user.slug + '/' + (user.profilePic || 'default.png')
     }
 }
 
@@ -90,7 +90,7 @@ exports.facebook = async (req,res,next) => {
     res.status(201)
     type = 'signup'
     const alias = auth.generateAlias(fb.name)
-    user = await User.create({
+    user = await new User({
       facebook: fb,
       hasPassword: false,
       mergedWithFacebook: true,
@@ -99,6 +99,8 @@ exports.facebook = async (req,res,next) => {
       email: fb.email,
       slug: slug(alias)
     })
+    await user.downloadProfilePic(fb.picture.data.url)
+    await user.save()
   } else if(!user.mergedWithFacebook) {
     user.facebook = fb
     user.mergedWithFacebook = true

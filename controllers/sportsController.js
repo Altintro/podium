@@ -4,6 +4,7 @@ const config = require('../config')
 const slug = require('slug')
 const Sport = require('../models/Sport')
 const fs = require('fs')
+const path = require('path')
 
 const baseSportsImagesURL = config.host + '/images/sports/'
 
@@ -38,14 +39,17 @@ exports.postSport = async (req,res,next) => {
 
 exports.uploadSportImage = async (req, res, next) => {
   const sport = await Sport.findById(req.params.id)
-  let uploadsPath = __dirname + '/../../public/images/sports/uploads/'
-  let imagePath = __dirname + '/../../public/images/sports/' + sport.slug
+  let uploadsPath = path.resolve('../public/images/uploads')
+  let imagePath = path.resolve('../public/images/sports/', sport.slug)
+
   if(!fs.existsSync(imagePath)) fs.mkdirSync(imagePath)
-  fs.rename(uploadsPath + req.file.filename,
+
+  fs.rename(uploadsPath + '/' + req.file.filename,
    imagePath + '/' + req.file.originalname,
     (err) => {
     if (err) return next(err)
   })
+
   sport.image = req.file.originalname
   await sport.save()
   return res.json({ success: true })
