@@ -56,7 +56,7 @@ exports.google = async (req,res,next) => {
     type = 'signup'
     res.status(201)
     const alias = auth.generateAlias(payload.name)
-    user = await User.create({
+    user = await new User({
       google: payload,
       hasPassword: false,
       mergedWithGoogle: true,
@@ -65,6 +65,8 @@ exports.google = async (req,res,next) => {
       email: payload.email,
       slug: slug(alias)
     })
+    await user.downloadProfilePic(payload.picture)
+    await user.save()
   } else if (!user.mergedWithGoogle){
     user.google = payload
     user.mergedWithGoogle = true
