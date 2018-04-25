@@ -1,9 +1,9 @@
 'use_strict'
 
-var jwt = require('jsonwebtoken')
-var config = require('../config')
-var shortid = require('shortid')
-var axios = require('axios')
+const jwt = require('jsonwebtoken')
+const config = require('../config')
+const shortid = require('shortid')
+const axios = require('axios')
 
 const {OAuth2Client} = require('google-auth-library');
 const googleClientId = config.google_client_id
@@ -11,10 +11,12 @@ const client = new OAuth2Client(googleClientId);
 
 exports.authRequired = (req,res,next) => {
   const token = req.headers['x-access-token']
-  if(!token) return res.status(400).json({ auth: false, message: 'No token provided'})
+  // if(!token) return res.status(400).json({ auth: false, message: 'No token provided'})
+  if(!token) return res.status(400).json({ status_code: 1, status_message: 'No token provided' })
 
   jwt.verify(token, config.secret, (err, decoded)=> {
-    if (err) return res.status(401).json({ auth: false, message: 'Failed to authenticate token' })
+    //if (err) return res.status(401).json({ status_code: 1, status_message: 'Failed to authenticate token' })
+    if (err) return res.status(401).json({ status_code: 2, status_message: 'Failed to authenticate token' })
     req.userId = decoded.id
     next()
   })
@@ -22,10 +24,10 @@ exports.authRequired = (req,res,next) => {
 
 exports.authRefreshRequired = (req, res, next) => {
   const token = req.headers['x-refresh-token']
-  if(!token) return res.status(400).json({ auth: false, message: 'No token provided'})
+  if(!token) return res.status(400).json({ status_code: 1, status_message: 'No token provided' })
 
   jwt.verify(token, config.secret, (err, decoded)=> {
-    if (err) return res.status(401).json({ auth: false, message: 'Failed to authenticate token' })
+    if (err) return res.status(401).json({ status_code: 2, status_message: 'Failed to authenticate token' })
     req.userId = decoded.id 
     req.refreshToken = token
     next()

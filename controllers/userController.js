@@ -22,11 +22,18 @@ exports.getUsers = async (req, res, next) => {
 }
 
 exports.getUser = async (req, res, next) => {
-  const user = await User.findById(req.params.id).populate({
+  const user = await User.findById(req.params.id)
+  .populate({
     path: 'interests',
-    select: 'name image -_id',
-    options: { limit: 10 }
+    select: 'name image',
+    options: { limit: 10 },
   }) 
+  .populate({
+    path: 'gamesPlaying',
+    select: 'name, sport, participants',
+    populate: { path:'sport', select: 'name image' },
+    populate: { path:'participants', select: 'name alias profilePic', options: { limit: 3 }}
+  })
   return res.status(200).json({ result: user })
 }
 

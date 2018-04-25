@@ -46,7 +46,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   // res.render('error');
   console.log(err.message)
-  res.json({ message: err.message, status: res.status })
+  res.json({ status_message: err.message, status_code: res.status })
 });
 
 module.exports = app;

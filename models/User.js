@@ -5,7 +5,7 @@ const config = require('../config')
 const path = require('path')
 const fs = require('fs')
 const axios = require('axios')
-const transporter = require('../lib/transporter').transporter
+const transporter = require('../utils/transporter').transporter
 var Schema = mongoose.Schema
 
 const userSchema = Schema({
