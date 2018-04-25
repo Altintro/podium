@@ -15,13 +15,13 @@ router.post('/emailRegister',userAccountController.emailRegister)
 router.post('/checkEmail', userAccountController.checkEmail)
 router.post('/checkAlias', userAccountController.checkAlias)
 router.get('/refreshToken', authRefreshRequired, userAccountController.refreshToken)
-
 router.get('/', userController.getUsers)
 router.get('/:id/detail', userController.getUser)
 
 router.use(authRequired);
 router.post('/socialRegister', userAccountController.socialRegisterUserUpdate)
 router.get('/tokens', userAccountController.tokens)
+router.get('/me',userController.me, userController.getUser)
 router.delete('/:id', userController.deleteUser)
 
 

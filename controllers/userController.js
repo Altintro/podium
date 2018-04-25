@@ -37,6 +37,11 @@ exports.getUser = async (req, res, next) => {
   return res.status(200).json({ result: user })
 }
 
+exports.me = async (req,res,next) => {
+  req.params.id = req.userId
+  next()
+}
+
 exports.deleteUser = async (req,res,next) => {
   var query = {_id: req.params.id}
   await User.deleteOne(query).exec()

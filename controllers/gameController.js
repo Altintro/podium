@@ -39,7 +39,6 @@ exports.getGame = async (req, res, next) => {
   const game = await Game.findById(req.params.id)
   .populate({ path : 'participants', select: 'name alias profilePic'})
   .populate({ path: 'sport', select: 'name image'})
-  .exec()
   res.status(200).json({ result: game })
 }
 

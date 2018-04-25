@@ -118,7 +118,6 @@ exports.facebook = async (req,res,next) => {
 }
 
 exports.socialRegisterUserUpdate = async (req, res, next) => {
-  console.log(req.body)
   const user = await User.findById(req.userId)
   const alias = req.body.alias
   let sports = req.body.sports
@@ -147,7 +146,6 @@ exports.email = async (req, res, next) => {
 }
 
 exports.emailRegister = async (req, res, next) => {
-  console.log(req.body)
   const user = await new User({
     name: req.body.name,
     alias: req.body.alias.toLowerCase().trim(),
