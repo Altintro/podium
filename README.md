@@ -155,7 +155,7 @@ When registering thorugh social media, user is created with a given alias and no
  	```
  	{
  	alias: "alias",
- 	sports: "sport1,sport2,sport3"
+ 	sports: "sport_id,sport_id,sport_id"
  	}
  	```
 
@@ -206,7 +206,7 @@ Once you've registered and have an *access-token* you will be able to get respon
 	```
 	{
 	name: 'name_of_game',
-	sport: 'sport_of_game',
+	sport: 'sport_id',
 	description: 'game_desc',
 	date: 'date'
 	}

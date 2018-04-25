@@ -44,8 +44,7 @@ exports.getGame = async (req, res, next) => {
 }
 
 exports.createGame = async (req, res, send) => {
-  console.log(req.body)
-  const sport = await Sport.findOne({ slug: req.body.sport.toLowerCase() })
+  const sport = await Sport.findById(req.body.sport)
   const game = await Game.create({ 
     name: req.body.name,
     participants: [req.userId] ,

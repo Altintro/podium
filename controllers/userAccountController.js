@@ -118,12 +118,14 @@ exports.facebook = async (req,res,next) => {
 }
 
 exports.socialRegisterUserUpdate = async (req, res, next) => {
+  console.log(req.body)
   const user = await User.findById(req.userId)
   const alias = req.body.alias
   let sports = req.body.sports
   if (sports) {
     sports = sports.split(',')
-    sports = await Sport.find({slug :sports})
+    sports = await Sport.find({ _id : sports })
+    console.log(sports)
     user.interests = sports.map((sport) => {
       return sport._id
     })
