@@ -197,10 +197,7 @@ Once you've registered and have an *access-token* you will be able to get respon
 	* Set a limit: */apiv1/games?limit=2*
 	* Sort the ads by property: */apiv1/games?sort=sport*
 
-* **Get Game Detail**: Get request to */apiv1/games/gameObjectId/detail?participants=true* 
-
-	(Adding participants=true or participants = false to the query, populates the 	property *participants* of the game being recieved or not, with the Team 	objects participanting on the game )
-
+* **Get Game Detail**: Get request to */apiv1/games/gameObjectId/detail*
 * **Post Game**: (auth required) Post request to */apiv1/games*. The post must have a body with the next format:
 	
 	```
@@ -261,9 +258,8 @@ Once you've registered and have an *access-token* you will be able to get respon
  	* Recieve only chosen fields of the ads: */apiv1/users?fields=name&fields=alias*
  	* Sort the ads by property: */apiv1/users?sort=name*
  	
-* **Get User Detail**: Get request to */apiv1/users/userObjectId/detail?games=true* 
-
-	(Adding games=true or games=false to the query, populates the 	property *gamesPlaying* of the game being recieved or not, with the Game 	objects that the user is participating in)
+* **Get User Detail**: Get request to */apiv1/users/userObjectId/detail*
+* **Get Owned User Detail**:(auth required) Get request to */apiv1/users/me*
 
 * **Delete User**: (auth required) Delete request to */apiv1/users/userObjectid*
 * **Update User**: (auth required) Post request to */api/users/update?sports='sport_names_separated_by_commas&alias='alias'*
