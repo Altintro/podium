@@ -27,7 +27,7 @@ exports.getGames = async (req, res, next) => {
   .limit(limit)
   .sort(sort)
   .populate({ path:'sport', select: 'name image'})
-  .populate({ path:'participants', select: 'name alias profilePic', options: { limit: 3 }})
+  .populate({ path:'participants', select: 'name alias slug profilePic', options: { limit: 3 }})
   .exec()
   games = games.map(mapBasicGame)
   return res.status(200).json({ result: games })
@@ -35,7 +35,7 @@ exports.getGames = async (req, res, next) => {
 
 exports.getGame = async (req, res, next) => {
   var game = await Game.findById(req.params.id)
-  .populate({ path : 'participants', select: 'name alias profilePic'})
+  .populate({ path : 'participants', select: 'name alias slug profilePic'})
   .populate({ path: 'sport', select: 'name image'})
   res.status(200).json({ result: mapBasicGame(game) })
 }
