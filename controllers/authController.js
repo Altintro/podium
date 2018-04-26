@@ -34,11 +34,11 @@ exports.authRefreshRequired = (req, res, next) => {
   })
 }
 
-exports.generateAccessToken = (userId) => { // 60 minutes
-  return jwt.sign({ id: userId }, config.secret , { expiresIn: 3600 })
+exports.generateAccessToken = (userId) => { // 7 days
+  return jwt.sign({ id: userId }, config.secret , { expiresIn: 604800 })
 }
 
-exports.generateRefreshToken = (userId) => { // Does not expire
+exports.generateRefreshToken = (userId) => { // Does not expire (Not sure, verify long live tokens)
   return jwt.sign({ id: userId }, config.secret)
 }
 

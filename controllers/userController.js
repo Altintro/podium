@@ -1,6 +1,6 @@
 'use_strict'
 
-const mapBasicUser = require('./userAccountController').mapBasicUser
+const userAccountController = require('./userAccountController')
 const User = require('../models/User')
 const Sport = require('../models/Sport')
 
@@ -17,7 +17,7 @@ exports.getUsers = async (req, res, next) => {
   if(alias){ filter.alias = { $regex: '^'+ alias, $options: 'i' }}
 
   let users = await User.find(filter).select('-pass').limit(limit).sort(sort).exec()
-  users = users.map(mapBasicUser)
+  users = users.map(userAccountController.mapBasicUser)
   return res.status(200).json({result: users})
 }
 
@@ -30,11 +30,10 @@ exports.getUser = async (req, res, next) => {
   }) 
   .populate({
     path: 'gamesPlaying',
-    select: 'name, sport, participants',
-    populate: { path:'sport', select: 'name image' },
-    populate: { path:'participants', select: 'name alias profilePic', options: { limit: 3 }}
+    select: 'name sport participants',
+    populate: { path:'sport participants', select: 'name image profilePic alias', options: { limit: 3 } },
   })
-  return res.status(200).json({ result: user })
+  return res.status(200).json({ result: userAccountController.mapUser(user) })
 }
 
 exports.me = async (req,res,next) => {

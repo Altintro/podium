@@ -8,6 +8,9 @@ const User = require('../models/User')
 const Sport = require('../models/Sport')
 const RevokedToken = require('../models/RevokedToken')
 
+const mapBasicGame = require('./gameController').mapBasicGame
+const mapBasicSport = require('./sportsController').mapBasicSport
+
 const baseUserImagesURL = config.host + '/images/users/'
 
 exports.mapBasicUser = (user) => {
@@ -15,8 +18,19 @@ exports.mapBasicUser = (user) => {
     _id: user.id,
     alias: user.alias,
     name: user.name,
-    profilePic: baseUserImagesURL + user.slug + '/' + (user.profilePic || 'default.png')
+    profilePic: baseUserImagesURL + user.slug + '/' + (user.profilePic || 'default.png'),
     }
+}
+
+exports.mapUser = (user) => {
+  return {
+    _id: user.id,
+    alias: user.alias,
+    name: user.name,
+    profilePic: baseUserImagesURL + user.slug + '/' + (user.profilePic || 'default.png'),
+    gamesPlaying: user.gamesPlaying.map(mapBasicGame),
+    interests: user.interests.map(mapBasicSport)
+  }
 }
 
 // Deprecate

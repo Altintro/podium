@@ -18,6 +18,8 @@ function mapBasicGame(game) {
   }
 }
 
+exports.mapBasicGame= mapBasicGame
+
 exports.getGames = async (req, res, next) => {
 
   const limit = parseInt(req.query.limit)
