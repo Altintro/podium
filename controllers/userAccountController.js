@@ -15,7 +15,6 @@ exports.mapBasicUser = (user) => {
     _id: user.id,
     alias: user.alias,
     name: user.name,
-    email: user.email,
     profilePic: baseUserImagesURL + user.slug + '/' + (user.profilePic || 'default.png')
     }
 }

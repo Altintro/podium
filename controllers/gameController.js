@@ -13,8 +13,8 @@ function mapBasicGame(game) {
     name: game.name,
     sport: sportsController.mapBasicSport(game.sport),
     participants: game.participants.map(userAccountController.mapBasicUser),
-    open: game.open,
-    modality: game.modality,
+    date: game.date,
+    description: game.description,
   }
 }
 
@@ -34,12 +34,10 @@ exports.getGames = async (req, res, next) => {
 }
 
 exports.getGame = async (req, res, next) => {
-
-  let participants = req.query.participants ? 'participants' : ''
-  const game = await Game.findById(req.params.id)
+  var game = await Game.findById(req.params.id)
   .populate({ path : 'participants', select: 'name alias profilePic'})
   .populate({ path: 'sport', select: 'name image'})
-  res.status(200).json({ result: game })
+  res.status(200).json({ result: mapBasicGame(game) })
 }
 
 exports.createGame = async (req, res, send) => {
