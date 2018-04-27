@@ -31,7 +31,7 @@ exports.getUser = async (req, res, next) => {
   .populate({
     path: 'gamesPlaying',
     select: 'name sport participants',
-    populate: { path:'sport participants', select: 'name image profilePic alias', options: { limit: 3 } },
+    populate: { path:'sport participants', select: 'name slug image profilePic alias', options: { limit: 3 } },
   })
   return res.status(200).json({ result: userAccountController.mapUser(user) })
 }
